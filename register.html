@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register — Mumbai Vidi Tambakhu Sangh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: linear-gradient(135deg, #FFF8F0 0%, #fff 100%); }
+
+    .reg-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 16px 60px;
+    }
+
+    /* Banner */
+    .reg-banner {
+      width: 100%;
+      background: linear-gradient(135deg, var(--secondary) 0%, #2d6a4f 60%, var(--primary) 100%);
+      padding: 32px 24px 28px;
+      text-align: center;
+      color: white;
+      margin-bottom: 32px;
+    }
+
+    .reg-banner .logo-icon { font-size: 48px; margin-bottom: 8px; }
+    .reg-banner .org-name  { font-size: 26px; font-weight: 800; letter-spacing: 0.5px; }
+    .reg-banner .org-mr    { font-size: 18px; font-weight: 600; opacity: 0.9; margin-bottom: 12px; }
+    .reg-banner .welcome   { font-size: 15px; opacity: 0.85; }
+
+    /* Form card */
+    .reg-card {
+      width: 100%;
+      max-width: 620px;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 36px 40px;
+      border: 1px solid var(--border);
+    }
+
+    @media (max-width: 640px) { .reg-card { padding: 24px 20px; } }
+
+    /* Step panel */
+    .step-panel { display: none; }
+    .step-panel.active { display: block; animation: slideUp 0.4s ease; }
+
+    /* Pin map */
+    #pinMap { height: 220px; border-radius: var(--radius-sm); margin-top: 8px; }
+
+    /* Photo upload */
+    .photo-upload-area {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-sm);
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+    }
+    .photo-upload-area:hover { border-color: var(--primary); background: rgba(255,107,53,0.03); }
+    .photo-upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    #photoPreviewWrapper { display: none; margin-top: 12px; }
+    #photoPreview { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); }
+
+    /* Payment box */
+    .summary-box {
+      background: #f9f5f0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    .summary-row { display: flex; justify-content: space-between; font-size: 14px; padding: 6px 0; border-bottom: 1px solid #ece5d8; }
+    .summary-row:last-child { border-bottom: none; font-size: 18px; font-weight: 800; color: var(--secondary); }
+
+    /* Razorpay mock button */
+    .pay-btn-area { text-align: center; }
+
+    /* UPI QR placeholder */
+    .upi-section {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: #f9f5f0;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+    .upi-qr-mock {
+      width: 90px; height: 90px;
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      text-align: center;
+      color: var(--text-light);
+      flex-shrink: 0;
+      padding: 4px;
+    }
+
+    /* Success animation */
+    .success-anim {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .success-checkmark {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: #dcfce7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      color: #16a34a;
+      margin-bottom: 16px;
+      animation: scaleIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+
+    /* Mini pass preview in step 3 */
+    .mini-pass {
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 24px;
+    }
+    .mini-pass-header {
+      background: linear-gradient(135deg, var(--primary), #e55a26);
+      padding: 12px 16px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mini-pass-body { padding: 16px; display: flex; gap: 16px; align-items: flex-start; }
+    .mini-avatar { width: 60px; height: 60px; border-radius: 10px; background: linear-gradient(135deg,var(--primary),#e55a26); color: white; display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;flex-shrink:0; }
+    .mini-pass-footer { background: var(--secondary); padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    #miniQrCode canvas, #miniQrCode img { display: block; }
+
+    /* Spinner */
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2.5px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== BANNER ===== -->
+<div class="reg-wrapper">
+  <div class="reg-banner" style="width:100%;max-width:100%;border-radius:0;">
+    <div class="logo-icon">🏛️</div>
+    <div class="org-name">Mumbai Vidi Tambakhu Sangh</div>
+    <div class="org-mr">मुंबई विडी तंबाखू संघ</div>
+    <div class="welcome">
+      <strong>आपले स्वागत आहे! | Welcome!</strong><br>
+      <span style="font-size:13px;opacity:0.8;">Join Mumbai Vidi Tambakhu Sangh / मुंबई विडी तंबाखू संघात सामील व्हा</span>
+    </div>
+  </div>
+
+  <!-- Stepper -->
+  <div style="width:100%;max-width:620px;margin-bottom:28px;">
+    <div class="stepper" id="stepper">
+      <div class="step active" id="step-ind-1">
+        <div class="step-circle">1</div>
+        <div class="step-info">
+          <div class="step-name-en">Personal Details</div>
+          <div class="step-name-mr">वैयक्तिक माहिती</div>
+        </div>
+      </div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step" id="step-ind-2">
+        <div class="step-circle">2</div>
+        <div class="step-info">
+          <div class="step-name-en">Payment</div>
+          <div class="step-name-mr">देयक</div>
+        </div>
+      </div>
+      <div class="step-line" id="line-2"></div>
+      <div class="step" id="step-ind-3">
+        <div class="step-circle">3</div>
+        <div class="step-info">
+          <div class="step-name-en">Your Pass</div>
+          <div class="step-name-mr">आपला पास</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== REG CARD ===== -->
+  <div class="reg-card">
+
+    <!-- ===== STEP 1 ===== -->
+    <div class="step-panel active" id="panel1">
+      <h2 style="font-size:20px;font-weight:700;margin-bottom:4px;color:var(--text-dark);">
+        <i class="fa-solid fa-user text-primary" style="margin-right:8px;"></i>Personal Details <span style="font-size:13px;color:var(--text-light);font-weight:400;">/ वैयक्तिक माहिती</span>
+      </h2>
+      <p style="font-size:13px;color:var(--text-light);margin-bottom:24px;">कृपया आपली माहिती भरा · Please fill in your details</p>
+
+      <div class="form-group">
+        <label class="form-label">Full Name <span class="mr-label">/ पूर्ण नाव</span></label>
+        <input type="text" class="form-control" id="fname" placeholder="Enter your full name" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Phone Number <span class="mr-label">/ फोन नंबर</span></label>
+        <div style="position:relative;">
+          <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--text-mid);">+91</span>
+          <input type="tel" class="form-control" id="fphone" placeholder="9876543210" style="padding-left:44px;" required>
+        </div>
+      </div>
+
+      <div style="background:#e6f4ea;border:1.5px solid #86efac;border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:#1B4332;color:white;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">
+          <i class="fa-solid fa-user-check"></i>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:#166534;">सभासद नोंदणी / Sabhasad Registration</div>
+          <div style="font-size:12px;color:#1B4332;">वार्षिक सदस्यत्व शुल्क / Annual Fee: <b>₹100</b></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Address <span class="mr-label">/ पत्ता</span></label>
+        <textarea class="form-control" id="faddress" placeholder="Enter your full address / पूर्ण पत्ता लिहा"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Area / Ward <span class="mr-label">/ क्षेत्र</span></label>
+        <select class="form-control" id="farea" onchange="movePin()">
+          <option value="">Select Area / क्षेत्र निवडा</option>
+          <option value="Dharavi" data-lat="19.0425" data-lng="72.8520">Dharavi</option>
+          <option value="Kurla" data-lat="19.0718" data-lng="72.8884">Kurla</option>
+          <option value="Bandra" data-lat="19.0544" data-lng="72.8402">Bandra</option>
+          <option value="Andheri East" data-lat="19.1136" data-lng="72.8697">Andheri East</option>
+          <option value="Andheri West" data-lat="19.1197" data-lng="72.8468">Andheri West</option>
+          <option value="Borivali" data-lat="19.2307" data-lng="72.8567">Borivali</option>
+          <option value="Dadar" data-lat="19.0185" data-lng="72.8428">Dadar</option>
+          <option value="Worli" data-lat="18.9946" data-lng="72.8232">Worli</option>
+          <option value="Chembur" data-lat="19.0522" data-lng="72.9005">Chembur</option>
+          <option value="Ghatkopar" data-lat="19.0870" data-lng="72.9096">Ghatkopar</option>
+          <option value="Malad" data-lat="19.1800" data-lng="72.8488">Malad</option>
+          <option value="Thane" data-lat="19.2148" data-lng="72.9786">Thane</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">
+          <i class="fa-solid fa-map-pin text-primary" style="margin-right:4px;"></i>
+          Pin Location on Map <span class="mr-label">/ नकाशावर स्थान</span>
+        </label>
+        <div style="font-size:12px;color:var(--text-light);margin-bottom:6px;">नकाशावर क्लिक करून पिन हलवा · Drag or click the pin to set your location</div>
+        <div id="pinMap"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Photo <span class="mr-label">/ छायाचित्र (Optional / ऐच्छिक)</span></label>
+        <div class="photo-upload-area" onclick="document.getElementById('photoInput').click()">
+          <input type="file" id="photoInput" accept="image/*" onchange="previewPhoto(event)" style="display:none;">
+          <i class="fa-solid fa-camera" style="font-size:28px;color:var(--text-light);margin-bottom:8px;"></i>
+          <div style="font-size:14px;color:var(--text-light);">Click to upload photo / फोटो अपलोड करा</div>
+          <div style="font-size:12px;color:#b0a89a;margin-top:4px;">JPG, PNG up to 5MB</div>
+        </div>
+        <div id="photoPreviewWrapper" style="text-align:center;margin-top:12px;display:none;">
+          <img id="photoPreview" src="" alt="Preview" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--primary);">
+          <div style="font-size:12px;color:var(--secondary);margin-top:6px;font-weight:600;">✓ Photo uploaded / फोटो अपलोड झाला</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-block btn-lg" onclick="goStep2()">
+        Next / पुढे <i class="fa-solid fa-arrow-right" style="margin-left:4px;"></i>
+      </button>
+    </div>
+
+    <!-- ===== STEP 2 ===== -->
+    <div class="step-panel" id="panel2">
+      <h2 style="font-size:20px;font-weight:700;margin-bottom:4px;color:var(--text-dark);">
+        <i class="fa-solid fa-credit-card text-primary" style="margin-right:8px;"></i>Payment <span style="font-size:13px;color:var(--text-light);font-weight:400;">/ देयक</span>
+      </h2>
+      <p style="font-size:13px;color:var(--text-light);margin-bottom:24px;">वार्षिक सदस्यता शुल्क भरा · Pay Annual Membership Fee</p>
+
+      <!-- Summary -->
+      <div class="summary-box">
+        <div style="font-size:13px;font-weight:700;color:var(--text-mid);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;">
+          <i class="fa-solid fa-receipt" style="margin-right:6px;color:var(--primary);"></i>Payment Summary / देयक सारांश
+        </div>
+        <div class="summary-row"><span>Name / नाव</span><span id="sumName" style="font-weight:600;">—</span></div>
+        <div class="summary-row"><span>Type / प्रकार</span><span id="sumType">—</span></div>
+        <div class="summary-row"><span>Area / क्षेत्र</span><span id="sumArea">—</span></div>
+        <div class="summary-row"><span>Membership Fee / शुल्क</span><span style="color:var(--primary);font-weight:700;">₹100</span></div>
+        <div class="summary-row"><span>Total / एकूण</span><span>₹100</span></div>
+      </div>
+
+      <!-- Pay button -->
+      <div class="pay-btn-area">
+        <button class="btn btn-primary btn-lg btn-block" id="payBtn" onclick="initiatePayment()">
+          <i class="fa-solid fa-lock" style="margin-right:6px;"></i>Pay ₹100 via Razorpay / ₹१०० भरा
+        </button>
+        <div style="margin-top:10px;font-size:12px;color:var(--text-light);">
+          <i class="fa-solid fa-shield-halved" style="color:#16a34a;"></i> Secured by Razorpay · सुरक्षित पेमेंट
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div style="display:flex;align-items:center;gap:12px;margin:20px 0;">
+        <div style="flex:1;border-top:1px solid var(--border);"></div>
+        <span style="font-size:13px;color:var(--text-light);">OR / किंवा</span>
+        <div style="flex:1;border-top:1px solid var(--border);"></div>
+      </div>
+
+      <!-- UPI QR -->
+      <div class="upi-section">
+        <div class="upi-qr-mock">
+          <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="80" height="80">
+            <rect width="80" height="80" fill="white"/>
+            <!-- Mock QR pattern -->
+            <rect x="5" y="5" width="28" height="28" rx="3" fill="none" stroke="#1B4332" stroke-width="3"/>
+            <rect x="11" y="11" width="16" height="16" rx="1" fill="#1B4332"/>
+            <rect x="47" y="5" width="28" height="28" rx="3" fill="none" stroke="#1B4332" stroke-width="3"/>
+            <rect x="53" y="11" width="16" height="16" rx="1" fill="#1B4332"/>
+            <rect x="5" y="47" width="28" height="28" rx="3" fill="none" stroke="#1B4332" stroke-width="3"/>
+            <rect x="11" y="53" width="16" height="16" rx="1" fill="#1B4332"/>
+            <!-- dots -->
+            <rect x="38" y="5" width="5" height="5" fill="#1B4332"/>
+            <rect x="38" y="13" width="5" height="5" fill="#1B4332"/>
+            <rect x="38" y="21" width="5" height="5" fill="#1B4332"/>
+            <rect x="5" y="38" width="5" height="5" fill="#1B4332"/>
+            <rect x="13" y="38" width="5" height="5" fill="#1B4332"/>
+            <rect x="21" y="38" width="5" height="5" fill="#1B4332"/>
+            <rect x="47" y="38" width="5" height="5" fill="#1B4332"/>
+            <rect x="55" y="38" width="5" height="5" fill="#1B4332"/>
+            <rect x="63" y="38" width="5" height="5" fill="#1B4332"/>
+            <rect x="47" y="47" width="5" height="5" fill="#FF6B35"/>
+            <rect x="55" y="55" width="5" height="5" fill="#FF6B35"/>
+            <rect x="63" y="47" width="5" height="5" fill="#FF6B35"/>
+            <rect x="47" y="63" width="5" height="5" fill="#FF6B35"/>
+            <rect x="63" y="63" width="5" height="5" fill="#FF6B35"/>
+          </svg>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:var(--text-dark);margin-bottom:4px;">UPI QR Code</div>
+          <div style="font-size:13px;color:var(--text-mid);margin-bottom:8px;">Scan to pay ₹100 / स्कॅन करून ₹१०० भरा</div>
+          <div style="font-size:12px;color:var(--text-light);font-family:monospace;">UPI ID: mtvssangh@upi</div>
+          <div style="font-size:12px;color:var(--text-light);margin-top:4px;">Or use any UPI app / कोणतेही UPI वापरा</div>
+        </div>
+      </div>
+
+      <button class="btn btn-outline btn-sm" style="margin-top:16px;" onclick="goStep(1)">
+        <i class="fa-solid fa-arrow-left"></i> Back / मागे
+      </button>
+    </div>
+
+    <!-- ===== STEP 3 ===== -->
+    <div class="step-panel" id="panel3">
+      <div class="success-anim">
+        <div class="success-checkmark">✓</div>
+        <h2 style="font-size:22px;font-weight:800;color:#166534;margin-bottom:6px;">Payment Successful!</h2>
+        <p style="font-size:16px;font-weight:600;color:#1B4332;margin-bottom:4px;">देयक यशस्वी! 🎉</p>
+        <p style="font-size:14px;color:var(--text-light);">Welcome to Mumbai Vidi Tambakhu Sangh<br>मुंबई विडी तंबाखू संघात आपले स्वागत आहे!</p>
+      </div>
+
+      <!-- Mini Pass Preview -->
+      <div class="mini-pass">
+        <div class="mini-pass-header">
+          <div>
+            <div style="font-size:13px;font-weight:800;">🏛️ Mumbai Vidi Tambakhu Sangh</div>
+            <div style="font-size:11px;opacity:0.85;">मुंबई विडी तंबाखू संघ</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:12px;font-weight:700;">MEMBER PASS</div>
+            <div style="font-size:10px;opacity:0.8;">सदस्य पास</div>
+          </div>
+        </div>
+        <div class="mini-pass-body">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+            <div class="mini-avatar" id="passAvatar">RP</div>
+            <div style="font-size:10px;color:var(--text-light);font-weight:600;">MTVS-2025-MBR-001</div>
+            <span class="badge badge-active" id="passTypeBadge" style="font-size:10px;padding:2px 8px;"><i class="fa-solid fa-user-check"></i> सभासद</span>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:18px;font-weight:800;color:var(--text-dark);margin-bottom:8px;" id="passNameDisplay">Ramesh Patil</div>
+            <div class="pass-detail" id="passTypeDetail"><i class="fa-solid fa-user-check" style="color:var(--secondary);"></i> <span>सभासद (Sabhasad)</span></div>
+            <div class="pass-detail" id="passAreaDisplay"><i class="fa-solid fa-location-dot"></i> <span>Dharavi, Mumbai</span></div>
+            <div class="pass-detail" id="passPhoneDisplay"><i class="fa-solid fa-phone"></i> <span>9876543210</span></div>
+            <div style="margin-top:10px;padding:8px 12px;background:#f0fdf4;border-radius:var(--radius-sm);border:1px solid #bbf7d0;">
+              <div style="font-size:11px;color:#166534;font-weight:600;">✓ Valid / वैध: Oct 14, 2025 – Oct 13, 2026</div>
+            </div>
+          </div>
+        </div>
+        <div class="mini-pass-footer">
+          <div id="miniQrCode" style="background:white;padding:5px;border-radius:6px;"></div>
+          <div style="flex:1;text-align:center;">
+            <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:4px;">Validity / वैधता</div>
+            <div style="background:rgba(255,255,255,0.2);border-radius:20px;height:6px;"><div style="background:#FFD700;width:5%;border-radius:20px;height:6px;"></div></div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.7);margin-top:4px;">365 days / दिवस remaining</div>
+          </div>
+          <div style="text-align:right;color:rgba(255,255,255,0.85);font-size:11px;font-weight:600;">Scan to Verify<br>स्कॅन करून<br>पडताळणी</div>
+        </div>
+      </div>
+
+      <!-- Full pass link -->
+      <div style="text-align:center;margin-bottom:16px;">
+        <a id="viewFullPassBtn" href="pass.html" style="font-size:13px;color:var(--primary);font-weight:600;text-decoration:none;">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> View Full Pass Page / पूर्ण पास पहा
+        </a>
+      </div>
+
+      <!-- Action buttons -->
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button class="btn btn-secondary btn-block" onclick="downloadPDF()">
+          <i class="fa-solid fa-file-pdf"></i> Download PDF / PDF डाउनलोड
+        </button>
+        <button class="btn btn-blue btn-block" onclick="downloadImage()">
+          <i class="fa-solid fa-image"></i> Download Image / प्रतिमा डाउनलोड
+        </button>
+        <button class="btn btn-block" style="background:#25D366;color:white;" onclick="sharePassWhatsApp()">
+          <i class="fa-brands fa-whatsapp"></i> Share on WhatsApp / WhatsApp वर शेअर
+        </button>
+      </div>
+    </div>
+
+  </div><!-- end reg-card -->
+
+  <div style="margin-top:20px;text-align:center;font-size:13px;color:var(--text-light);">
+    <a href="index.html" style="color:var(--primary);font-weight:600;text-decoration:none;"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard / डॅशबोर्डवर परत</a>
+  </div>
+
+</div><!-- end reg-wrapper -->
+
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/919999999999" target="_blank" class="whatsapp-float">
+  <i class="fa-brands fa-whatsapp"></i>
+  <span class="tooltip">WhatsApp संपर्क</span>
+</a>
+
+<!-- SCRIPTS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script>
+// --- Read URL params and pre-fill ---
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('name'))  document.getElementById('fname').value  = decodeURIComponent(params.get('name'));
+  if (params.get('phone')) document.getElementById('fphone').value = decodeURIComponent(params.get('phone'));
+})();
+
+
+
+// --- Leaflet pin map ---
+const pinMap = L.map('pinMap').setView([19.0425, 72.8520], 12);
+// CartoDB Positron — free, no API key, clean Google-Maps-like look
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
+  subdomains: 'abcd',
+  maxZoom: 19,
+}).addTo(pinMap);
+
+const draggablePin = L.marker([19.0425, 72.8520], { draggable: true })
+  .addTo(pinMap)
+  .bindPopup('आपले स्थान / Your location');
+
+draggablePin.on('dragend', function() {
+  const pos = draggablePin.getLatLng();
+  console.log('Pin moved to:', pos.lat, pos.lng);
+});
+
+pinMap.on('click', function(e) {
+  draggablePin.setLatLng(e.latlng);
+});
+
+function movePin() {
+  const sel = document.getElementById('farea');
+  const opt = sel.options[sel.selectedIndex];
+  if (opt && opt.dataset.lat) {
+    const lat = parseFloat(opt.dataset.lat);
+    const lng = parseFloat(opt.dataset.lng);
+    draggablePin.setLatLng([lat, lng]);
+    pinMap.setView([lat, lng], 14);
+  }
+}
+
+// --- Photo preview ---
+function previewPhoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    document.getElementById('photoPreview').src = ev.target.result;
+    document.getElementById('photoPreviewWrapper').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+// --- Step navigation ---
+function goStep(n) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel'+n).classList.add('active');
+
+  document.querySelectorAll('.step').forEach((s, i) => {
+    s.classList.remove('active', 'done');
+    if (i+1 < n) s.classList.add('done');
+    if (i+1 === n) s.classList.add('active');
+  });
+  document.querySelectorAll('.step-line').forEach((l, i) => {
+    l.classList.toggle('done', i+1 < n);
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goStep2() {
+  const name  = document.getElementById('fname').value.trim();
+  const phone = document.getElementById('fphone').value.trim();
+  const area  = document.getElementById('farea').value;
+
+  if (!name)  { alert('कृपया पूर्ण नाव प्रविष्ट करा. / Please enter Full Name.'); document.getElementById('fname').focus(); return; }
+  if (!phone) { alert('कृपया फोन नंबर प्रविष्ट करा. / Please enter Phone Number.'); document.getElementById('fphone').focus(); return; }
+  if (!area)  { alert('कृपया क्षेत्र निवडा. / Please select Area.'); document.getElementById('farea').focus(); return; }
+
+  // Fill summary
+  document.getElementById('sumName').textContent = name;
+  document.getElementById('sumType').innerHTML = '<span class="badge badge-active" style="font-size:11.5px;"><i class="fa-solid fa-user-check"></i> सभासद / Sabhasad</span>';
+  document.getElementById('sumArea').textContent = area;
+  goStep(2);
+}
+
+// --- Mock payment ---
+function initiatePayment() {
+  const btn = document.getElementById('payBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Processing... / प्रक्रिया होत आहे';
+
+  setTimeout(() => {
+    // Fill pass details
+    const name  = document.getElementById('fname').value.trim()  || 'Ramesh Patil';
+    const phone = document.getElementById('fphone').value.trim() || '9876543210';
+    const area  = document.getElementById('farea').value         || 'Dharavi';
+    const ini   = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+
+    document.getElementById('passAvatar').textContent = ini;
+    document.getElementById('passNameDisplay').textContent = name;
+    document.getElementById('passPhoneDisplay').querySelector('span').textContent = phone;
+    document.getElementById('passAreaDisplay').querySelector('span').textContent = area + ', Mumbai';
+    document.getElementById('passTypeBadge').innerHTML = '<i class="fa-solid fa-user-check"></i> सभासद';
+    document.getElementById('passTypeBadge').className = 'badge badge-active';
+
+    // Link to pass
+    document.getElementById('viewFullPassBtn').href = `pass.html?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&area=${encodeURIComponent(area)}`;
+
+    // Generate QR
+    document.getElementById('miniQrCode').innerHTML = '';
+    new QRCode(document.getElementById('miniQrCode'), {
+      text: `MTVS-2025-MBR-001|${name}|${area}|2026-10-13`,
+      width: 60, height: 60,
+      colorDark: '#1B4332', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+
+    goStep(3);
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-lock" style="margin-right:6px;"></i>Pay ₹100 via Razorpay / ₹१०० भरा';
+  }, 2200);
+}
+
+// --- Download mock ---
+function downloadPDF()   { alert('📄 PDF download शीघ्रच उपलब्ध होईल! / PDF download coming soon!'); }
+function downloadImage() { alert('🖼️ Image download शीघ्रच उपलब्ध होईल! / Image download coming soon!'); }
+
+function sharePassWhatsApp() {
+  const name = document.getElementById('fname').value || 'Ramesh Patil';
+  const msg = `🏛️ *Mumbai Vidi Tambakhu Sangh*\n\n*सभासद: ${name}*\nID: MTVS-2025-MBR-001\nValid Until: Oct 13, 2026\n\n✅ सभासदत्व यशस्वीरित्या मिळाले!\nView pass: pass.html?name=${encodeURIComponent(name)}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+}
+</script>
+</body>
+</html>

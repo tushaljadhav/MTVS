@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Members — Mumbai Vidi Tambakhu Sangh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .member-photo { display: flex; align-items: center; gap: 10px; }
+    .member-id-col { font-family: monospace; font-size: 13px; color: var(--text-light); }
+    .action-btns { display: flex; gap: 6px; }
+    .action-btns .btn { padding: 5px 10px; font-size: 12px; }
+    .phone-col { font-family: monospace; font-size: 13px; }
+    .table-meta { font-size: 13px; color: var(--text-light); }
+    .stats-bar {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .stats-bar-item {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+    @media (max-width: 768px) { .action-btns { flex-direction: column; } }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand">
+    <span class="brand-icon">🏛️</span>
+    <div>
+      <div class="brand-name">Mumbai Vidi Tambakhu Sangh</div>
+      <div class="brand-sub">मुंबई विडी तंबाखू संघ</div>
+    </div>
+  </a>
+
+  <ul class="navbar-links" id="navLinks">
+    <li><a href="index.html"><i class="fa-solid fa-gauge-high"></i> Dashboard</a></li>
+    <li><a href="members.html" class="active"><i class="fa-solid fa-users"></i> Members / सदस्य</a></li>
+    <li><a href="index.html#" onclick="window.location='index.html';"><i class="fa-solid fa-link"></i> Invites / आमंत्रणे</a></li>
+    <li><a href="#"><i class="fa-solid fa-chart-bar"></i> Reports / अहवाल</a></li>
+  </ul>
+
+  <div class="navbar-right">
+    <div style="text-align:right;">
+      <div class="admin-name">Admin: Suresh Khot</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.6);">संघ प्रशासक</div>
+    </div>
+    <div class="admin-avatar">SK</div>
+    <div class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== PAGE BODY ===== -->
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between" style="margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+    <div>
+      <h1 class="page-title"><i class="fa-solid fa-users text-primary" style="margin-right:8px;"></i>Members List <span style="font-size:14px;color:var(--text-light);font-weight:400;">/ सदस्य यादी</span></h1>
+      <p class="page-subtitle">Manage all Sangh members · सर्व संघ सदस्य व्यवस्थापित करा</p>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <a href="register.html" class="btn btn-primary btn-sm">
+        <i class="fa-solid fa-plus"></i> Add Member / सदस्य जोडा
+      </a>
+      <button class="btn btn-blue btn-sm" onclick="exportCSV()">
+        <i class="fa-solid fa-file-csv"></i> Export CSV
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="stats-bar slide-up">
+    <div class="stats-bar-item"><span style="color:var(--primary);">●</span> Total सभासद: <b>347</b></div>
+    <div class="stats-bar-item"><span style="color:#16a34a;">●</span> Active / सक्रिय: <b>312</b></div>
+    <div class="stats-bar-item"><span style="color:#dc2626;">●</span> Expired / कालबाह्य: <b>35</b></div>
+    <div class="stats-bar-item"><span style="color:#16a34a;"><i class="fa-solid fa-indian-rupee-sign"></i></span> जमा रक्कम: <b>₹34,700</b></div>
+  </div>
+
+  <!-- ===== FILTER BAR ===== -->
+  <div class="filter-bar slide-up anim-delay-1">
+    <div class="search-wrapper">
+      <i class="fa-solid fa-search"></i>
+      <input type="text" class="form-control search-input" id="searchInput" placeholder="Search name, phone, area, ID... / नाव, फोन, क्षेत्र शोधा" oninput="filterTable()">
+    </div>
+
+    <select class="form-control" style="width:auto;" id="areaFilter" onchange="filterTable()">
+      <option value="">All Areas / सर्व क्षेत्र</option>
+      <option>Dharavi</option>
+      <option>Kurla</option>
+      <option>Bandra</option>
+      <option>Andheri East</option>
+      <option>Andheri West</option>
+      <option>Borivali</option>
+      <option>Dadar</option>
+      <option>Worli</option>
+      <option>Chembur</option>
+      <option>Ghatkopar</option>
+      <option>Malad</option>
+      <option>Thane</option>
+    </select>
+
+    <select class="form-control" style="width:auto;" id="statusFilter" onchange="filterTable()">
+      <option value="">All Status / सर्व स्थिती</option>
+      <option value="Active">Active / सक्रिय</option>
+      <option value="Expired">Expired / कालबाह्य</option>
+    </select>
+
+    <button class="btn btn-outline btn-sm" onclick="clearFilters()">
+      <i class="fa-solid fa-xmark"></i> Clear
+    </button>
+  </div>
+
+  <!-- Table count -->
+  <div class="table-meta" style="margin-bottom:10px;">
+    Showing <span id="showCount">20</span> of 347 members &nbsp;·&nbsp;
+    <span id="filterInfo" style="color:var(--primary);font-weight:600;"></span>
+  </div>
+
+  <!-- ===== TABLE ===== -->
+  <div class="table-wrapper slide-up anim-delay-2">
+    <table id="membersTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Sabhasad / सभासद</th>
+          <th>Member ID</th>
+          <th>Area / क्षेत्र</th>
+          <th>Phone / फोन</th>
+          <th>Joined / सामील</th>
+          <th>Valid Until / वैधता</th>
+          <th>Status / स्थिती</th>
+          <th>Actions / क्रिया</th>
+        </tr>
+      </thead>
+      <tbody id="membersBody">
+        <!-- Rows injected by JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <button class="page-btn" onclick="changePage(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="page-btn active" id="page1" onclick="setPage(1)">1</button>
+    <button class="page-btn" id="page2" onclick="setPage(2)">2</button>
+    <button class="page-btn" id="page3" onclick="setPage(3)">3</button>
+    <span style="padding:0 4px;color:var(--text-light);">...</span>
+    <button class="page-btn" onclick="setPage(18)">18</button>
+    <button class="page-btn" onclick="changePage(1)"><i class="fa-solid fa-chevron-right"></i></button>
+  </div>
+  <div style="text-align:center;margin-top:8px;font-size:13px;color:var(--text-light);">Page 1 of 18 &nbsp;·&nbsp; एकूण 347 सदस्य</div>
+
+</div>
+
+<!-- ===== FLOATING WHATSAPP ===== -->
+<a href="https://wa.me/919999999999" target="_blank" class="whatsapp-float">
+  <i class="fa-brands fa-whatsapp"></i>
+  <span class="tooltip">WhatsApp संपर्क</span>
+</a>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+const MEMBERS = [
+  { id:'MTVS-2025-001', name:'Ramesh Patil',      initials:'RP', area:'Dharavi',      phone:'9876543210', joined:'01 Jan 2025', valid:'31 Dec 2025', status:'Active',  color:'#FF6B35' },
+  { id:'MTVS-2025-002', name:'Sunita Kale',        initials:'SK', area:'Bandra',       phone:'9823456789', joined:'05 Jan 2025', valid:'04 Jan 2026', status:'Active',  color:'#1B4332' },
+  { id:'MTVS-2025-003', name:'Mohan Shinde',       initials:'MS', area:'Andheri East', phone:'9867452310', joined:'10 Jan 2025', valid:'09 Jan 2026', status:'Active',  color:'#e55a26' },
+  { id:'MTVS-2025-004', name:'Priya Agarwal',      initials:'PA', area:'Kurla',        phone:'8945612378', joined:'15 Jan 2025', valid:'14 Jan 2026', status:'Active',  color:'#2d6a4f' },
+  { id:'MTVS-2025-005', name:'Bharat Jadhav',      initials:'BJ', area:'Worli',        phone:'7745678901', joined:'20 Jan 2025', valid:'19 Jan 2026', status:'Active',  color:'#FF6B35' },
+  { id:'MTVS-2024-006', name:'Kavita Sawant',      initials:'KS', area:'Dadar',        phone:'9912345670', joined:'01 Oct 2024', valid:'30 Sep 2025', status:'Expired', color:'#888' },
+  { id:'MTVS-2025-007', name:'Ganesh Kamble',      initials:'GK', area:'Ghatkopar',    phone:'8800123456', joined:'01 Feb 2025', valid:'31 Jan 2026', status:'Active',  color:'#1B4332' },
+  { id:'MTVS-2025-008', name:'Nanda Rane',         initials:'NR', area:'Dadar',        phone:'9234567891', joined:'05 Feb 2025', valid:'04 Feb 2026', status:'Active',  color:'#2d6a4f' },
+  { id:'MTVS-2025-009', name:'Vijay Pawar',        initials:'VP', area:'Malad',        phone:'9345678912', joined:'10 Feb 2025', valid:'09 Feb 2026', status:'Active',  color:'#FF6B35' },
+  { id:'MTVS-2024-010', name:'Lalita Desai',       initials:'LD', area:'Santacruz',    phone:'9456789123', joined:'01 Aug 2024', valid:'31 Jul 2025', status:'Expired', color:'#888' },
+  { id:'MTVS-2025-011', name:'Sanjay More',        initials:'SM', area:'Kurla',        phone:'9567891234', joined:'15 Feb 2025', valid:'14 Feb 2026', status:'Active',  color:'#FF6B35' },
+  { id:'MTVS-2025-012', name:'Meera Patkar',       initials:'MP', area:'Bandra',       phone:'9678901235', joined:'20 Feb 2025', valid:'19 Feb 2026', status:'Active',  color:'#1B4332' },
+  { id:'MTVS-2024-013', name:'Ashok Shetty',       initials:'AS', area:'Borivali',     phone:'9789012346', joined:'01 Jul 2024', valid:'30 Jun 2025', status:'Expired', color:'#888' },
+  { id:'MTVS-2025-014', name:'Ravi Korde',         initials:'RK', area:'Dharavi',      phone:'9890123457', joined:'01 Mar 2025', valid:'28 Feb 2026', status:'Active',  color:'#2d6a4f' },
+  { id:'MTVS-2025-015', name:'Kiran Jadhav',       initials:'KJ', area:'Thane',        phone:'9012345678', joined:'10 Mar 2025', valid:'09 Mar 2026', status:'Active',  color:'#FF6B35' },
+  { id:'MTVS-2025-016', name:'Suresh Rane',        initials:'SR', area:'Andheri East', phone:'8012345679', joined:'15 Mar 2025', valid:'14 Mar 2026', status:'Active',  color:'#1B4332' },
+  { id:'MTVS-2024-017', name:'Rekha Joshi',        initials:'RJ', area:'Chembur',      phone:'8123456790', joined:'01 Jun 2024', valid:'31 May 2025', status:'Expired', color:'#888' },
+  { id:'MTVS-2025-018', name:'Dinesh Kulkarni',    initials:'DK', area:'Borivali',     phone:'8234567901', joined:'01 Apr 2025', valid:'31 Mar 2026', status:'Active',  color:'#FF6B35' },
+  { id:'MTVS-2025-019', name:'Archana Mhatre',     initials:'AM', area:'Andheri West', phone:'8345678912', joined:'05 Apr 2025', valid:'04 Apr 2026', status:'Active',  color:'#2d6a4f' },
+  { id:'MTVS-2025-020', name:'Pramod Gaikwad',     initials:'PG', area:'Worli',        phone:'8456789023', joined:'10 Apr 2025', valid:'09 Apr 2026', status:'Active',  color:'#FF6B35' },
+];
+
+let filteredMembers = [...MEMBERS];
+
+function renderTable() {
+  const tbody = document.getElementById('membersBody');
+  tbody.innerHTML = '';
+  filteredMembers.forEach((m, i) => {
+    const statusBadge = m.status === 'Active'
+      ? `<span class="badge badge-active"><i class="fa-solid fa-circle" style="font-size:7px;"></i> Active</span>`
+      : `<span class="badge badge-expired"><i class="fa-solid fa-circle" style="font-size:7px;"></i> Expired</span>`;
+
+    tbody.innerHTML += `
+      <tr class="slide-up" style="animation-delay:${i*0.03}s;">
+        <td style="color:var(--text-light);font-size:12px;">${i+1}</td>
+        <td>
+          <div class="member-photo">
+            <div class="avatar" style="background:${m.color};">${m.initials}</div>
+            <div>
+              <div style="font-size:13.5px;font-weight:600;">${m.name}</div>
+              <div style="font-size:11px;color:var(--text-light);"><span class="badge badge-sabhasad" style="font-size:10px;padding:1px 6px;">सभासद</span></div>
+            </div>
+          </div>
+        </td>
+        <td class="member-id-col">${m.id}</td>
+        <td style="font-size:13px;"><i class="fa-solid fa-location-dot" style="color:var(--primary);margin-right:4px;font-size:11px;"></i>${m.area}</td>
+        <td class="phone-col">${m.phone}</td>
+        <td style="font-size:12.5px;color:var(--text-mid);">${m.joined}</td>
+        <td style="font-size:12.5px;${m.status==='Expired'?'color:#dc2626;font-weight:600;':'color:#166534;'}">${m.valid}</td>
+        <td>${statusBadge}</td>
+        <td>
+          <div class="action-btns">
+            <a href="pass.html?name=${encodeURIComponent(m.name)}&phone=${m.phone}&area=${encodeURIComponent(m.area)}&id=${m.id}" class="btn btn-primary btn-sm" title="View Pass">
+              <i class="fa-solid fa-id-card"></i> Pass
+            </a>
+            <a href="https://wa.me/91${m.phone}?text=${encodeURIComponent('🏛️ Mumbai Vidi Tambakhu Sangh\nनमस्ते '+m.name+', आपल्या सभासदत्वाबद्दल संपर्क करण्यात येत आहे.')}" target="_blank" class="btn btn-sm" style="background:#25D366;color:white;" title="WhatsApp">
+              <i class="fa-brands fa-whatsapp"></i>
+            </a>
+          </div>
+        </td>
+      </tr>`;
+  });
+  document.getElementById('showCount').textContent = filteredMembers.length;
+}
+
+function filterTable() {
+  const q      = document.getElementById('searchInput').value.toLowerCase();
+  const area   = document.getElementById('areaFilter').value;
+  const status = document.getElementById('statusFilter').value;
+
+  filteredMembers = MEMBERS.filter(m => {
+    const matchQ = !q || m.name.toLowerCase().includes(q) || m.phone.includes(q) || m.area.toLowerCase().includes(q) || m.id.toLowerCase().includes(q);
+    const matchA = !area   || m.area   === area;
+    const matchS = !status || m.status === status;
+    return matchQ && matchA && matchS;
+  });
+
+  const active = [area,status,q].filter(Boolean).length;
+  document.getElementById('filterInfo').textContent = active ? `${active} filter(s) active` : '';
+  renderTable();
+}
+
+function clearFilters() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('areaFilter').value  = '';
+  document.getElementById('statusFilter').value = '';
+  filteredMembers = [...MEMBERS];
+  document.getElementById('filterInfo').textContent = '';
+  renderTable();
+}
+
+function exportCSV() {
+  const headers = ['ID','Name','Role','Area','Phone','Joined','Valid Until','Status'];
+  const rows = MEMBERS.map(m => [m.id, m.name, 'सभासद (Sabhasad)', m.area, m.phone, m.joined, m.valid, m.status]);
+  const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'MTVS_Sabhasad_List.csv';
+  a.click();
+}
+
+let currentPage = 1;
+function changePage(delta) {
+  currentPage = Math.max(1, Math.min(18, currentPage + delta));
+  updatePagination();
+}
+function setPage(p) { currentPage = p; updatePagination(); }
+function updatePagination() {
+  [1,2,3].forEach(n => {
+    document.getElementById('page'+n)?.classList.toggle('active', n === currentPage);
+  });
+}
+
+// Initial render
+renderTable();
+</script>
+</body>
+</html>
