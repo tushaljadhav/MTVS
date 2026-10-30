@@ -51,7 +51,7 @@
       padding: 40px 16px 60px;
     }
 
-    /* ── PASS CAPTURE AREA (Wraps Card + Ad Slots 2 & 4 for Print / PDF / Image) ── */
+    /* ── PASS CAPTURE AREA (Wraps Card + Square Carousel for Print / PDF / Image) ── */
     .pass-capture-area {
       width: 700px;
       max-width: 100%;
@@ -231,7 +231,7 @@
 
     .pass-dates .arrow { color: #16a34a; }
 
-    /* ── ADVERTISEMENT SECTIONS ── */
+    /* ── ADVERTISEMENT SECTIONS & CAROUSEL STYLES ── */
     .ad-label {
       font-size: 11px;
       font-weight: 600;
@@ -240,9 +240,9 @@
       user-select: none;
     }
 
-    /* Ad slot 1: Wide Banner below Validity card, above progress bar */
+    /* Carousel Wrapper: Wide Banners (below Validity Card, above progress bar) */
     .pass-ad-slot-1-wrapper {
-      padding: 0 28px 22px 28px;
+      padding: 0 28px 20px 28px;
       background: #ffffff;
       box-sizing: border-box;
       width: 100%;
@@ -254,7 +254,50 @@
       text-align: left;
     }
 
-    .ad-slot-1-link {
+    /* Carousel Wrapper: Square Posters (below pass card, above Action Buttons) */
+    .pass-ad-slot-2-wrapper {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto 28px auto;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .ad-label-slot2 {
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    /* Carousel core layout */
+    .ad-carousel {
+      position: relative;
+      width: 100%;
+      user-select: none;
+      touch-action: pan-y;
+    }
+
+    .ad-carousel-viewport {
+      overflow: hidden;
+      width: 100%;
+      position: relative;
+    }
+
+    .ad-carousel-track {
+      display: flex;
+      width: 100%;
+      transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+      will-change: transform;
+    }
+
+    .ad-carousel-slide {
+      min-width: 100%;
+      width: 100%;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+
+    .ad-carousel-slide a {
       display: block;
       width: 100%;
       text-decoration: none;
@@ -263,34 +306,85 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .ad-slot-1-link:hover {
+    .ad-carousel-slide a:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 14px rgba(212, 175, 55, 0.3);
     }
 
-    .ad-slot-1-img {
+    /* Wide Carousel Container */
+    .pass-ad-slot-1-wrapper .ad-carousel-viewport {
+      border-radius: 12px;
+      border: 1.5px solid #d4af37;
+      box-shadow: 0 2px 10px rgba(212, 175, 55, 0.16);
+      background: #fafafa;
+    }
+
+    .ad-slide-wide-img {
       width: 100%;
       height: auto;
       max-width: 100%;
       display: block;
-      border-radius: 12px;
-      border: 1.5px solid #d4af37;
-      box-shadow: 0 2px 10px rgba(212, 175, 55, 0.16);
       object-fit: contain;
-      box-sizing: border-box;
+    }
+
+    /* Square Carousel Container */
+    .pass-ad-slot-2-wrapper .ad-carousel-viewport {
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    .ad-slide-square-img {
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      object-fit: contain;
+    }
+
+    /* Carousel Navigation Dots */
+    .ad-carousel-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .ad-carousel-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.22);
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .pass-ad-slot-1-wrapper .ad-carousel-dot {
+      background: rgba(212, 175, 55, 0.35);
+    }
+
+    .pass-ad-slot-1-wrapper .ad-carousel-dot.active {
+      background: #d4af37;
+      width: 18px;
+      border-radius: 4px;
+    }
+
+    .pass-ad-slot-2-wrapper .ad-carousel-dot {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .pass-ad-slot-2-wrapper .ad-carousel-dot.active {
+      background: #ffffff;
+      width: 18px;
+      border-radius: 4px;
     }
 
     /* Footer */
     .pass-footer {
       background: linear-gradient(135deg, #1B4332 0%, #163d2a 100%);
       padding: 18px 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .pass-footer-main {
-      width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -377,141 +471,6 @@
       user-select: none;
     }
 
-    /* Ad slot 3: Wide Banner below Annual Membership, above Issued by MTVS Admin */
-    .pass-ad-slot-3-wrapper {
-      width: 100%;
-      box-sizing: border-box;
-      margin-top: 2px;
-    }
-
-    .ad-label-slot3 {
-      color: rgba(255, 255, 255, 0.75);
-      margin-bottom: 6px;
-      text-align: left;
-    }
-
-    .ad-slot-3-link {
-      display: block;
-      width: 100%;
-      text-decoration: none;
-      border-radius: 12px;
-      overflow: hidden;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .ad-slot-3-link:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 14px rgba(212, 175, 55, 0.35);
-    }
-
-    .ad-slot-3-img {
-      width: 100%;
-      height: auto;
-      max-width: 100%;
-      display: block;
-      border-radius: 12px;
-      border: 1.5px solid #d4af37;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-      object-fit: contain;
-      box-sizing: border-box;
-    }
-
-    .pass-admin-footer-text {
-      font-size: 10px;
-      color: rgba(255, 255, 255, 0.6);
-      text-align: center;
-      width: 100%;
-      letter-spacing: 0.3px;
-    }
-
-    /* Ad slot 2: Square Poster below Issued by MTVS Admin */
-    .pass-ad-slot-2-wrapper {
-      width: 100%;
-      max-width: 500px;
-      margin: 0 auto 24px auto;
-      text-align: center;
-      box-sizing: border-box;
-    }
-
-    .ad-label-slot2 {
-      color: rgba(255, 255, 255, 0.75);
-      margin-bottom: 8px;
-      text-align: center;
-    }
-
-    .ad-slot-2-link {
-      display: block;
-      width: 100%;
-      max-width: 500px;
-      margin: 0 auto;
-      text-decoration: none;
-      border-radius: 16px;
-      overflow: hidden;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .ad-slot-2-link:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.4);
-    }
-
-    .ad-slot-2-img {
-      width: 100%;
-      max-width: 500px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
-      object-fit: contain;
-      box-sizing: border-box;
-    }
-
-    /* Ad slot 4: Square Poster directly below slot 2, above Action Buttons */
-    .pass-ad-slot-4-wrapper {
-      width: 100%;
-      max-width: 500px;
-      margin: 0 auto 28px auto;
-      text-align: center;
-      box-sizing: border-box;
-    }
-
-    .ad-label-slot4 {
-      color: rgba(255, 255, 255, 0.75);
-      margin-bottom: 8px;
-      text-align: center;
-    }
-
-    .ad-slot-4-link {
-      display: block;
-      width: 100%;
-      max-width: 500px;
-      margin: 0 auto;
-      text-decoration: none;
-      border-radius: 16px;
-      overflow: hidden;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .ad-slot-4-link:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.4);
-    }
-
-    .ad-slot-4-img {
-      width: 100%;
-      max-width: 500px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
-      object-fit: contain;
-      box-sizing: border-box;
-    }
-
     /* ── ACTION BUTTONS ── */
     .pass-actions {
       display: flex;
@@ -557,11 +516,9 @@
       .pass-page-wrapper { padding: 16px 12px 40px; }
       .pass-body  { flex-direction: column; align-items: center; padding: 18px 14px; gap: 18px; }
       .pass-ad-slot-1-wrapper { padding: 0 14px 16px 14px; }
-      .pass-ad-slot-2-wrapper,
-      .pass-ad-slot-4-wrapper { padding: 0 8px; margin-bottom: 20px; }
+      .pass-ad-slot-2-wrapper { padding: 0 8px; margin-bottom: 20px; }
       .pass-info-side { width: 100%; }
-      .pass-footer { padding: 18px 14px; }
-      .pass-footer-main { flex-direction: column; align-items: center; text-align: center; gap: 16px; }
+      .pass-footer { flex-direction: column; align-items: center; text-align: center; gap: 16px; padding: 18px 14px; }
       .pass-scan-text { text-align: center; }
       .pass-actions { flex-direction: column; width: 100%; }
       .pass-actions .btn { width: 100%; }
@@ -579,7 +536,7 @@
       .pass-dates .arrow { display: none; }
     }
 
-    /* ── PRINT STYLES ── */
+    /* ── PRINT STYLES (Stack all ads vertically for complete printout) ── */
     @media print {
       * {
         -webkit-print-color-adjust: exact !important;
@@ -593,7 +550,8 @@
       .pass-page-nav,
       .pass-actions,
       .info-strip,
-      .whatsapp-float {
+      .whatsapp-float,
+      .ad-carousel-dots {
         display: none !important;
       }
       .pass-page-wrapper {
@@ -613,20 +571,41 @@
         margin-bottom: 20px !important;
       }
       .pass-ad-slot-1-wrapper,
-      .pass-ad-slot-3-wrapper {
+      .pass-ad-slot-2-wrapper {
         page-break-inside: avoid !important;
         break-inside: avoid !important;
       }
-      .pass-ad-slot-2-wrapper,
-      .pass-ad-slot-4-wrapper {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        margin-top: 10px !important;
-        margin-bottom: 20px !important;
-      }
-      .ad-label-slot2,
-      .ad-label-slot4 {
+      .ad-label-slot2 {
         color: #64748b !important;
+      }
+
+      /* Stack all carousel slides one below another in print */
+      .ad-carousel-viewport {
+        overflow: visible !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+      }
+      .ad-carousel-track {
+        display: flex !important;
+        flex-direction: column !important;
+        transform: none !important;
+        gap: 12px !important;
+      }
+      .ad-carousel-slide {
+        min-width: 100% !important;
+        width: 100% !important;
+        margin-bottom: 8px !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .ad-slide-wide-img {
+        border-radius: 10px !important;
+        border: 1.5px solid #d4af37 !important;
+      }
+      .ad-slide-square-img {
+        border-radius: 14px !important;
+        border: 1px solid #cbd5e1 !important;
       }
     }
   </style>
@@ -645,7 +624,7 @@
 <!-- ===== PASS PAGE WRAPPER ===== -->
 <div class="pass-page-wrapper">
 
-  <!-- ===== PASS CAPTURE AREA (Encompasses Pass Card + Ad Slots 2 & 4) ===== -->
+  <!-- ===== PASS CAPTURE AREA (Encompasses Pass Card + Square Carousel) ===== -->
   <div class="pass-capture-area" id="passCaptureArea">
 
     <!-- ===== THE PASS CARD ===== -->
@@ -753,80 +732,69 @@
         </div><!-- end pass-info-side -->
       </div><!-- end pass-body -->
 
-      <!-- ── AD SLOT 1 (Wide Banner: below Validity card, above progress bar) ── -->
-      <div class="pass-ad-slot-1-wrapper" id="adSlot1Container">
+      <!-- ── WIDE AD CAROUSEL (below Validity card, above progress bar) ── -->
+      <div class="pass-ad-slot-1-wrapper" id="wideCarouselWrapper">
         <div class="ad-label ad-label-slot1">
           <span>Advertisement / जाहिरात</span>
         </div>
-        <div class="ad-content-slot" id="adSlot1"></div>
+        <div class="ad-carousel" id="wideCarousel">
+          <div class="ad-carousel-viewport">
+            <div class="ad-carousel-track" id="wideCarouselTrack"></div>
+          </div>
+          <div class="ad-carousel-dots" id="wideCarouselDots"></div>
+        </div>
       </div>
 
       <!-- FOOTER with QR -->
       <div class="pass-footer">
 
-        <div class="pass-footer-main">
-          <div class="pass-qr-wrap">
-            <div id="qrCode"></div>
-            <div class="pass-qr-label">Scan to Verify<br>स्कॅन करा</div>
-          </div>
+        <div class="pass-qr-wrap">
+          <div id="qrCode"></div>
+          <div class="pass-qr-label">Scan to Verify<br>स्कॅन करा</div>
+        </div>
 
-          <div class="pass-validity-section">
-            <div class="pass-validity-header">
-              <span>Joined / सामील: Oct 2025</span>
-              <span>Expires / समाप्त: Oct 2026</span>
-            </div>
-            <div class="pass-progress-track">
-              <div class="pass-progress-fill" id="progressFill"></div>
-            </div>
-            <div class="pass-progress-labels">
-              <span><i class="fa-solid fa-circle" style="color:#4ade80;font-size:8px;"></i> 365 days remaining / दिवस बाकी</span>
-              <span>100% valid</span>
-            </div>
-            <div style="margin-top:12px;text-align:center;">
-              <div style="font-size:11px;color:rgba(255,255,255,0.6);">Annual Membership / वार्षिक सभासदत्व</div>
-              <div style="font-size:13px;color:#FFD700;font-weight:700;margin-top:2px;">
-                <i class="fa-solid fa-indian-rupee-sign" style="font-size:11px;"></i>100 / वर्ष
-              </div>
-            </div>
+        <div class="pass-validity-section">
+          <div class="pass-validity-header">
+            <span>Joined / सामील: Oct 2025</span>
+            <span>Expires / समाप्त: Oct 2026</span>
           </div>
-
-          <div class="pass-scan-text">
-            <div class="scan-icon"><i class="fa-solid fa-qrcode"></i></div>
-            <div class="scan-title">Scan to Verify</div>
-            <div class="scan-mr">स्कॅन करून पडताळणी</div>
+          <div class="pass-progress-track">
+            <div class="pass-progress-fill" id="progressFill"></div>
+          </div>
+          <div class="pass-progress-labels">
+            <span><i class="fa-solid fa-circle" style="color:#4ade80;font-size:8px;"></i> 365 days remaining / दिवस बाकी</span>
+            <span>100% valid</span>
+          </div>
+          <div style="margin-top:12px;text-align:center;">
+            <div style="font-size:11px;color:rgba(255,255,255,0.6);">Annual Membership / वार्षिक सभासदत्व</div>
+            <div style="font-size:13px;color:#FFD700;font-weight:700;margin-top:2px;">
+              <i class="fa-solid fa-indian-rupee-sign" style="font-size:11px;"></i>100 / वर्ष
+            </div>
           </div>
         </div>
 
-        <!-- ── AD SLOT 3 (Wide Banner: below Annual Membership, above Issued by MTVS Admin) ── -->
-        <div class="pass-ad-slot-3-wrapper" id="adSlot3Container">
-          <div class="ad-label ad-label-slot3">
-            <span>Advertisement / जाहिरात</span>
-          </div>
-          <div class="ad-content-slot" id="adSlot3"></div>
-        </div>
-
-        <div class="pass-admin-footer-text">
-          Issued by MTVS Admin · 2025-2026
+        <div class="pass-scan-text">
+          <div class="scan-icon"><i class="fa-solid fa-qrcode"></i></div>
+          <div class="scan-title">Scan to Verify</div>
+          <div class="scan-mr">स्कॅन करून पडताळणी</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.55);margin-top:4px;">Issued by MTVS Admin<br>2025-2026</div>
         </div>
 
       </div><!-- end pass-footer -->
 
     </div><!-- end pass-card -->
 
-    <!-- ── AD SLOT 2 (Square Poster: below "Issued by MTVS Admin") ── -->
-    <div class="pass-ad-slot-2-wrapper" id="adSlot2Container">
+    <!-- ── SQUARE AD CAROUSEL (below pass card, above Action Buttons) ── -->
+    <div class="pass-ad-slot-2-wrapper" id="squareCarouselWrapper">
       <div class="ad-label ad-label-slot2">
         <span>Advertisement / जाहिरात</span>
       </div>
-      <div class="ad-content-slot" id="adSlot2"></div>
-    </div>
-
-    <!-- ── AD SLOT 4 (Square Poster: directly below slot 2, above Action Buttons) ── -->
-    <div class="pass-ad-slot-4-wrapper" id="adSlot4Container">
-      <div class="ad-label ad-label-slot4">
-        <span>Advertisement / जाहिरात</span>
+      <div class="ad-carousel" id="squareCarousel">
+        <div class="ad-carousel-viewport">
+          <div class="ad-carousel-track" id="squareCarouselTrack"></div>
+        </div>
+        <div class="ad-carousel-dots" id="squareCarouselDots"></div>
       </div>
-      <div class="ad-content-slot" id="adSlot4"></div>
     </div>
 
   </div><!-- end pass-capture-area -->
@@ -870,66 +838,202 @@
 <script>
 // ==============================================================
 // ADVERTISEMENT CONFIGURATION
-// Easily modify or update the ads by editing this array:
-// slot: 1 -> Wide banner below Validity card, above progress bar
-// slot: 2 -> Square poster below Issued by MTVS Admin
-// slot: 3 -> Wide banner below Annual Membership ₹100, above Issued by MTVS Admin
-// slot: 4 -> Square poster directly below slot 2, above action buttons
-// src:   -> Image path in /ads folder (e.g. 'ads/ad1.jpg')
-// link:  -> Optional link URL to open in new tab (leave '' for no link)
+// Add or modify ads in this array:
+// type: 'wide'   -> Wide Carousel (below Validity card, above progress bar)
+// type: 'square' -> Square Carousel (below pass card, above Action buttons)
+// src:  Image file path (e.g. 'ads/ad1.jpg')
+// link: Optional URL to open in new tab (leave '' for no link)
 // ==============================================================
 const ADS = [
-  { slot: 1, src: 'ads/ad1.jpg', link: '' },
-  { slot: 2, src: 'ads/ad2.jpg', link: '' },
-  { slot: 3, src: 'ads/ad3.jpg', link: '' },
-  { slot: 4, src: 'ads/ad4.jpg', link: '' }
+  // Wide Carousel: Wide Banners
+  { type: 'wide', src: 'ads/ad1.jpg', link: '' },
+  { type: 'wide', src: 'ads/ad3.jpg', link: '' },
+
+  // Square Carousel: Square Posters
+  { type: 'square', src: 'ads/ad2.jpg', link: '' },
+  { type: 'square', src: 'ads/ad4.jpg', link: '' }
 ];
 
-// Initialize and render advertisements
-function initAds() {
-  [1, 2, 3, 4].forEach(slotNum => {
-    const wrapper = document.getElementById(`adSlot${slotNum}Container`);
-    const content = document.getElementById(`adSlot${slotNum}`);
-    if (!wrapper || !content) return;
+// Carousel Engine (Native Vanilla JS, zero heavy libraries)
+class AdCarousel {
+  constructor(wrapperId, trackId, dotsId, adType) {
+    this.wrapper = document.getElementById(wrapperId);
+    this.track = document.getElementById(trackId);
+    this.dotsContainer = document.getElementById(dotsId);
+    this.adType = adType;
+    this.slides = [];
+    this.currentIndex = 0;
+    this.timer = null;
+    this.startX = 0;
+    this.startY = 0;
+    this.isSwiping = false;
 
-    const adConfig = ADS.find(ad => ad.slot === slotNum);
+    this.init();
+  }
 
-    // If no ad configured or empty src, hide completely
-    if (!adConfig || !adConfig.src || !adConfig.src.trim()) {
-      wrapper.style.display = 'none';
-      content.innerHTML = '';
+  init() {
+    if (!this.wrapper || !this.track) return;
+
+    // Filter matching ads (support both type: 'wide'/'square' and legacy slot numbers)
+    const matchingAds = ADS.filter(ad => {
+      const type = (ad.type || '').toLowerCase();
+      if (this.adType === 'wide') {
+        return type === 'wide' || ad.slot === 1 || ad.slot === 3 || ad.slot === 'wide';
+      } else {
+        return type === 'square' || ad.slot === 2 || ad.slot === 4 || ad.slot === 'square';
+      }
+    }).filter(ad => ad.src && ad.src.trim());
+
+    if (matchingAds.length === 0) {
+      this.wrapper.style.display = 'none';
       return;
     }
 
-    wrapper.style.display = '';
+    this.track.innerHTML = '';
+    this.dotsContainer.innerHTML = '';
 
-    const img = document.createElement('img');
-    img.alt = 'Advertisement / जाहिरात';
-    img.className = `ad-slot-${slotNum}-img`;
+    matchingAds.forEach(ad => {
+      const slide = document.createElement('div');
+      slide.className = 'ad-carousel-slide';
 
-    // Hide completely on error (no broken image icon)
-    img.onerror = () => {
-      wrapper.style.display = 'none';
-      content.innerHTML = '';
-    };
+      const img = document.createElement('img');
+      img.alt = 'Advertisement / जाहिरात';
+      img.className = this.adType === 'wide' ? 'ad-slide-wide-img' : 'ad-slide-square-img';
+      img.loading = 'lazy';
 
-    img.src = adConfig.src.trim();
+      // If an individual image fails to load, remove its slide
+      img.onerror = () => {
+        slide.remove();
+        this.slides = Array.from(this.track.querySelectorAll('.ad-carousel-slide'));
+        if (this.slides.length === 0) {
+          this.wrapper.style.display = 'none';
+          this.stop();
+        } else {
+          if (this.currentIndex >= this.slides.length) {
+            this.currentIndex = 0;
+          }
+          this.buildDots();
+          this.goToSlide(this.currentIndex);
+        }
+      };
 
-    // Wrap in link if URL is provided
-    let toAppend = img;
-    if (adConfig.link && adConfig.link.trim()) {
-      const a = document.createElement('a');
-      a.href = adConfig.link.trim();
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      a.className = `ad-slot-${slotNum}-link`;
-      a.appendChild(img);
-      toAppend = a;
+      img.src = ad.src.trim();
+
+      let elementToAppend = img;
+      if (ad.link && ad.link.trim()) {
+        const a = document.createElement('a');
+        a.href = ad.link.trim();
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.appendChild(img);
+        elementToAppend = a;
+      }
+
+      slide.appendChild(elementToAppend);
+      this.track.appendChild(slide);
+    });
+
+    this.slides = Array.from(this.track.querySelectorAll('.ad-carousel-slide'));
+    this.wrapper.style.display = '';
+
+    this.buildDots();
+    this.attachEvents();
+    this.start();
+  }
+
+  buildDots() {
+    this.dotsContainer.innerHTML = '';
+    if (this.slides.length <= 1) {
+      this.dotsContainer.style.display = 'none';
+      return;
     }
 
-    content.innerHTML = '';
-    content.appendChild(toAppend);
-  });
+    this.dotsContainer.style.display = 'flex';
+    this.slides.forEach((_, i) => {
+      const dot = document.createElement('span');
+      dot.className = `ad-carousel-dot${i === this.currentIndex ? ' active' : ''}`;
+      dot.addEventListener('click', () => {
+        this.goToSlide(i);
+        this.resetTimer();
+      });
+      this.dotsContainer.appendChild(dot);
+    });
+  }
+
+  updateDots() {
+    const dots = this.dotsContainer.querySelectorAll('.ad-carousel-dot');
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === this.currentIndex);
+    });
+  }
+
+  goToSlide(index) {
+    if (this.slides.length === 0) return;
+    this.currentIndex = (index + this.slides.length) % this.slides.length;
+    this.track.style.transform = `translateX(-${this.currentIndex * 100}%)`;
+    this.updateDots();
+  }
+
+  nextSlide() {
+    if (this.slides.length <= 1) return;
+    this.goToSlide(this.currentIndex + 1);
+  }
+
+  prevSlide() {
+    if (this.slides.length <= 1) return;
+    this.goToSlide(this.currentIndex - 1);
+  }
+
+  start() {
+    if (this.slides.length <= 1) return;
+    this.stop();
+    this.timer = setInterval(() => this.nextSlide(), 3000);
+  }
+
+  stop() {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
+  }
+
+  resetTimer() {
+    this.stop();
+    this.start();
+  }
+
+  attachEvents() {
+    // Hover pause
+    this.wrapper.addEventListener('mouseenter', () => this.stop());
+    this.wrapper.addEventListener('mouseleave', () => this.start());
+
+    // Touch swipe support & pause on touch
+    this.track.addEventListener('touchstart', (e) => {
+      this.stop();
+      this.startX = e.touches[0].clientX;
+      this.startY = e.touches[0].clientY;
+      this.isSwiping = true;
+    }, { passive: true });
+
+    this.track.addEventListener('touchend', (e) => {
+      if (!this.isSwiping) return;
+      this.isSwiping = false;
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+      const diffX = endX - this.startX;
+      const diffY = endY - this.startY;
+
+      // Detect horizontal swipe
+      if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX < 0) {
+          this.nextSlide();
+        } else {
+          this.prevSlide();
+        }
+      }
+      this.resetTimer();
+    }, { passive: true });
+  }
 }
 
 // Read URL query params
@@ -949,8 +1053,9 @@ document.getElementById('passArea').textContent   = formattedArea;
 document.getElementById('stripArea').textContent  = formattedArea;
 document.getElementById('stripId').textContent    = id;
 
-// Render ads
-initAds();
+// Initialize both auto-sliding carousels
+const wideCarousel = new AdCarousel('wideCarouselWrapper', 'wideCarouselTrack', 'wideCarouselDots', 'wide');
+const squareCarousel = new AdCarousel('squareCarouselWrapper', 'squareCarouselTrack', 'squareCarouselDots', 'square');
 
 // Generate QR code
 new QRCode(document.getElementById('qrCode'), {
@@ -979,7 +1084,56 @@ async function waitForImages(element) {
   }));
 }
 
-// Download Pass as PDF (Includes Member Card and all configured Advertisements)
+// Prepare cloned DOM for Download PDF / Download Image / WhatsApp Share:
+// Stacks all ads vertically so EVERY ad appears in the output file!
+function prepareClonedForCapture(clonedDoc) {
+  const clonedArea = clonedDoc.getElementById('passCaptureArea');
+  if (clonedArea) {
+    clonedArea.style.padding = '18px';
+    clonedArea.style.borderRadius = '20px';
+    clonedArea.style.background = '#f8fafc';
+  }
+  const label2 = clonedDoc.querySelector('.ad-label-slot2');
+  if (label2) label2.style.color = '#64748b';
+
+  // Hide carousel dots in export
+  clonedDoc.querySelectorAll('.ad-carousel-dots').forEach(dots => {
+    dots.style.display = 'none';
+  });
+
+  // Stack all carousel slides vertically
+  clonedDoc.querySelectorAll('.ad-carousel-viewport').forEach(vp => {
+    vp.style.overflow = 'visible';
+    vp.style.border = 'none';
+    vp.style.boxShadow = 'none';
+    vp.style.background = 'transparent';
+  });
+
+  clonedDoc.querySelectorAll('.ad-carousel-track').forEach(track => {
+    track.style.display = 'flex';
+    track.style.flexDirection = 'column';
+    track.style.transform = 'none';
+    track.style.gap = '12px';
+  });
+
+  clonedDoc.querySelectorAll('.ad-carousel-slide').forEach(slide => {
+    slide.style.minWidth = '100%';
+    slide.style.width = '100%';
+    slide.style.marginBottom = '6px';
+  });
+
+  clonedDoc.querySelectorAll('.ad-slide-wide-img').forEach(img => {
+    img.style.borderRadius = '10px';
+    img.style.border = '1.5px solid #d4af37';
+  });
+
+  clonedDoc.querySelectorAll('.ad-slide-square-img').forEach(img => {
+    img.style.borderRadius = '14px';
+    img.style.border = '1px solid #cbd5e1';
+  });
+}
+
+// Download Pass as PDF (Stacks all ads so every ad is included)
 async function downloadPDF() {
   const btn = document.getElementById('btnDownloadPDF');
   const origHtml = btn ? btn.innerHTML : '';
@@ -1003,15 +1157,12 @@ async function downloadPDF() {
       backgroundColor: '#ffffff',
       logging: false,
       onclone: (clonedDoc) => {
+        prepareClonedForCapture(clonedDoc);
         const clonedArea = clonedDoc.getElementById('passCaptureArea');
         if (clonedArea) {
           clonedArea.style.padding = '12px';
           clonedArea.style.background = '#ffffff';
         }
-        const label2 = clonedDoc.querySelector('.ad-label-slot2');
-        if (label2) label2.style.color = '#64748b';
-        const label4 = clonedDoc.querySelector('.ad-label-slot4');
-        if (label4) label4.style.color = '#64748b';
       }
     });
 
@@ -1050,7 +1201,7 @@ async function downloadPDF() {
   }
 }
 
-// Download Pass as high-res Image (Includes Member Card and all configured Advertisements)
+// Download Pass as high-res Image (Stacks all ads so every ad is included)
 async function downloadImage() {
   const btn = document.getElementById('btnDownloadImage');
   const origHtml = btn ? btn.innerHTML : '';
@@ -1074,16 +1225,7 @@ async function downloadImage() {
       backgroundColor: '#f8fafc',
       logging: false,
       onclone: (clonedDoc) => {
-        const clonedArea = clonedDoc.getElementById('passCaptureArea');
-        if (clonedArea) {
-          clonedArea.style.padding = '18px';
-          clonedArea.style.borderRadius = '20px';
-          clonedArea.style.background = '#f8fafc';
-        }
-        const label2 = clonedDoc.querySelector('.ad-label-slot2');
-        if (label2) label2.style.color = '#64748b';
-        const label4 = clonedDoc.querySelector('.ad-label-slot4');
-        if (label4) label4.style.color = '#64748b';
+        prepareClonedForCapture(clonedDoc);
       }
     });
 
@@ -1101,7 +1243,7 @@ async function downloadImage() {
   }
 }
 
-// WhatsApp Share (Shares verified link and passes image on supported devices)
+// WhatsApp Share (Shares verified link and passes image with all ads on supported devices)
 async function shareWhatsApp() {
   const msg = `🏛️ *Mumbai Vidi Tambakhu Sangh*\n\n👤 *सभासद: ${name}*\n🆔 ID: ${id}\n📍 Area: ${formattedArea}\n📅 Valid Until: 13 Oct 2026\n\n✅ *सभासदत्व पडताळणी यशस्वी!*\n✅ *Sabhasad Membership Verified!*\n\n🔗 View Pass: ${window.location.href}`;
 
@@ -1115,7 +1257,10 @@ async function shareWhatsApp() {
           scale: 2,
           useCORS: true,
           allowTaint: false,
-          backgroundColor: '#ffffff'
+          backgroundColor: '#ffffff',
+          onclone: (clonedDoc) => {
+            prepareClonedForCapture(clonedDoc);
+          }
         });
         const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
         if (blob) {
