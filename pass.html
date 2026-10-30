@@ -51,6 +51,15 @@
       padding: 40px 16px 60px;
     }
 
+    /* ── PASS CAPTURE AREA (Wraps Card + Ad Slots 2 & 4 for Print / PDF / Image) ── */
+    .pass-capture-area {
+      width: 700px;
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
     /* ── THE PASS CARD ── */
     .pass-card {
       width: 700px;
@@ -60,7 +69,7 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2);
       overflow: hidden;
       position: relative;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
       animation: scaleIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
     }
 
@@ -222,10 +231,66 @@
 
     .pass-dates .arrow { color: #16a34a; }
 
+    /* ── ADVERTISEMENT SECTIONS ── */
+    .ad-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      user-select: none;
+    }
+
+    /* Ad slot 1: Wide Banner below Validity card, above progress bar */
+    .pass-ad-slot-1-wrapper {
+      padding: 0 28px 22px 28px;
+      background: #ffffff;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .ad-label-slot1 {
+      color: #94a3b8;
+      margin-bottom: 6px;
+      text-align: left;
+    }
+
+    .ad-slot-1-link {
+      display: block;
+      width: 100%;
+      text-decoration: none;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .ad-slot-1-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(212, 175, 55, 0.3);
+    }
+
+    .ad-slot-1-img {
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      display: block;
+      border-radius: 12px;
+      border: 1.5px solid #d4af37;
+      box-shadow: 0 2px 10px rgba(212, 175, 55, 0.16);
+      object-fit: contain;
+      box-sizing: border-box;
+    }
+
     /* Footer */
     .pass-footer {
       background: linear-gradient(135deg, #1B4332 0%, #163d2a 100%);
       padding: 18px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .pass-footer-main {
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -240,6 +305,7 @@
       flex-direction: column;
       align-items: center;
       gap: 4px;
+      flex-shrink: 0;
     }
 
     .pass-qr-label { font-size: 9px; color: var(--text-light); font-weight: 600; text-align: center; }
@@ -293,6 +359,7 @@
     .pass-scan-text {
       text-align: right;
       color: rgba(255,255,255,0.9);
+      flex-shrink: 0;
     }
     .pass-scan-text .scan-title  { font-size: 12px; font-weight: 700; }
     .pass-scan-text .scan-mr    { font-size: 10px; opacity: 0.75; }
@@ -308,6 +375,141 @@
       font-weight: 900;
       pointer-events: none;
       user-select: none;
+    }
+
+    /* Ad slot 3: Wide Banner below Annual Membership, above Issued by MTVS Admin */
+    .pass-ad-slot-3-wrapper {
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 2px;
+    }
+
+    .ad-label-slot3 {
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 6px;
+      text-align: left;
+    }
+
+    .ad-slot-3-link {
+      display: block;
+      width: 100%;
+      text-decoration: none;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .ad-slot-3-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(212, 175, 55, 0.35);
+    }
+
+    .ad-slot-3-img {
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      display: block;
+      border-radius: 12px;
+      border: 1.5px solid #d4af37;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+      object-fit: contain;
+      box-sizing: border-box;
+    }
+
+    .pass-admin-footer-text {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      width: 100%;
+      letter-spacing: 0.3px;
+    }
+
+    /* Ad slot 2: Square Poster below Issued by MTVS Admin */
+    .pass-ad-slot-2-wrapper {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto 24px auto;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .ad-label-slot2 {
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .ad-slot-2-link {
+      display: block;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      text-decoration: none;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .ad-slot-2-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .ad-slot-2-img {
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+      object-fit: contain;
+      box-sizing: border-box;
+    }
+
+    /* Ad slot 4: Square Poster directly below slot 2, above Action Buttons */
+    .pass-ad-slot-4-wrapper {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto 28px auto;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .ad-label-slot4 {
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .ad-slot-4-link {
+      display: block;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      text-decoration: none;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .ad-slot-4-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .ad-slot-4-img {
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+      object-fit: contain;
+      box-sizing: border-box;
     }
 
     /* ── ACTION BUTTONS ── */
@@ -354,8 +556,12 @@
       .pass-page-nav { padding: 10px 14px; flex-wrap: wrap; gap: 8px; justify-content: center; text-align: center; }
       .pass-page-wrapper { padding: 16px 12px 40px; }
       .pass-body  { flex-direction: column; align-items: center; padding: 18px 14px; gap: 18px; }
+      .pass-ad-slot-1-wrapper { padding: 0 14px 16px 14px; }
+      .pass-ad-slot-2-wrapper,
+      .pass-ad-slot-4-wrapper { padding: 0 8px; margin-bottom: 20px; }
       .pass-info-side { width: 100%; }
-      .pass-footer { flex-direction: column; align-items: center; text-align: center; gap: 16px; padding: 18px 14px; }
+      .pass-footer { padding: 18px 14px; }
+      .pass-footer-main { flex-direction: column; align-items: center; text-align: center; gap: 16px; }
       .pass-scan-text { text-align: center; }
       .pass-actions { flex-direction: column; width: 100%; }
       .pass-actions .btn { width: 100%; }
@@ -373,11 +579,55 @@
       .pass-dates .arrow { display: none; }
     }
 
+    /* ── PRINT STYLES ── */
     @media print {
-      body { background: white !important; }
-      .pass-page-nav, .pass-actions, .info-strip, .whatsapp-float { display: none !important; }
-      .pass-page-wrapper { padding: 20px; }
-      .pass-card { box-shadow: none; border: 2px solid #ccc; }
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      body {
+        background: white !important;
+        color: #111827 !important;
+        min-height: auto !important;
+      }
+      .pass-page-nav,
+      .pass-actions,
+      .info-strip,
+      .whatsapp-float {
+        display: none !important;
+      }
+      .pass-page-wrapper {
+        padding: 0 !important;
+        margin: 0 auto !important;
+      }
+      .pass-capture-area {
+        width: 100% !important;
+        max-width: 680px !important;
+        margin: 0 auto !important;
+      }
+      .pass-card {
+        box-shadow: none !important;
+        border: 1.5px solid #d1d5db !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-bottom: 20px !important;
+      }
+      .pass-ad-slot-1-wrapper,
+      .pass-ad-slot-3-wrapper {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .pass-ad-slot-2-wrapper,
+      .pass-ad-slot-4-wrapper {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-top: 10px !important;
+        margin-bottom: 20px !important;
+      }
+      .ad-label-slot2,
+      .ad-label-slot4 {
+        color: #64748b !important;
+      }
     }
   </style>
 </head>
@@ -395,162 +645,204 @@
 <!-- ===== PASS PAGE WRAPPER ===== -->
 <div class="pass-page-wrapper">
 
-  <!-- ===== THE PASS CARD ===== -->
-  <div class="pass-card">
+  <!-- ===== PASS CAPTURE AREA (Encompasses Pass Card + Ad Slots 2 & 4) ===== -->
+  <div class="pass-capture-area" id="passCaptureArea">
 
-    <!-- Watermark -->
-    <div class="pass-watermark">MTVS</div>
+    <!-- ===== THE PASS CARD ===== -->
+    <div class="pass-card" id="passCard">
 
-    <!-- HEADER -->
-    <div class="pass-header">
-      <div class="pass-header-logo">🏛️</div>
+      <!-- Watermark -->
+      <div class="pass-watermark">MTVS</div>
 
-      <div class="pass-header-center">
-        <div class="pass-org-name">Mumbai Vidi Tambakhu Sangh</div>
-        <div class="pass-org-mr">मुंबई विडी तंबाखू संघ</div>
-        <div style="font-size:10.5px;color:rgba(255,255,255,0.7);margin-top:3px;">Registered Association · Mumbai, Maharashtra</div>
+      <!-- HEADER -->
+      <div class="pass-header">
+        <div class="pass-header-logo">🏛️</div>
+
+        <div class="pass-header-center">
+          <div class="pass-org-name">Mumbai Vidi Tambakhu Sangh</div>
+          <div class="pass-org-mr">मुंबई विडी तंबाखू संघ</div>
+          <div style="font-size:10.5px;color:rgba(255,255,255,0.7);margin-top:3px;">Registered Association · Mumbai, Maharashtra</div>
+        </div>
+
+        <div class="pass-header-right">
+          <div class="pass-tag">MEMBER PASS</div>
+          <div class="pass-tag-mr">सदस्य पास</div>
+          <div style="margin-top:6px;">
+            <span class="badge badge-active" style="font-size:10.5px;background:rgba(255,255,255,0.2);color:white;border-color:rgba(255,255,255,0.4);">
+              <i class="fa-solid fa-circle" style="font-size:7px;color:#4ade80;"></i> VALID / वैध
+            </span>
+          </div>
+        </div>
       </div>
 
-      <div class="pass-header-right">
-        <div class="pass-tag">MEMBER PASS</div>
-        <div class="pass-tag-mr">सदस्य पास</div>
-        <div style="margin-top:6px;">
-          <span class="badge badge-active" style="font-size:10.5px;background:rgba(255,255,255,0.2);color:white;border-color:rgba(255,255,255,0.4);">
-            <i class="fa-solid fa-circle" style="font-size:7px;color:#4ade80;"></i> VALID / वैध
+      <!-- Gold bar -->
+      <div class="pass-gold-bar"></div>
+
+      <!-- BODY -->
+      <div class="pass-body">
+
+        <!-- Photo Side -->
+        <div class="pass-photo-side">
+          <div class="pass-avatar-ring">
+            <div class="pass-avatar" id="passAvatar">RP</div>
+          </div>
+          <div class="pass-member-id" id="passId">MTVS-2025-MBR-001</div>
+          <span class="badge badge-active" style="background:#e6f4ea;color:#1B4332;border:1px solid #86efac;font-size:12px;padding:4px 12px;">
+            <i class="fa-solid fa-user-check"></i> सभासद
           </span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Gold bar -->
-    <div class="pass-gold-bar"></div>
-
-    <!-- BODY -->
-    <div class="pass-body">
-
-      <!-- Photo Side -->
-      <div class="pass-photo-side">
-        <div class="pass-avatar-ring">
-          <div class="pass-avatar" id="passAvatar">RP</div>
-        </div>
-        <div class="pass-member-id" id="passId">MTVS-2025-MBR-001</div>
-        <span class="badge badge-active" style="background:#e6f4ea;color:#1B4332;border:1px solid #86efac;font-size:12px;padding:4px 12px;">
-          <i class="fa-solid fa-user-check"></i> सभासद
-        </span>
-        <div style="font-size:10.5px;color:var(--text-light);text-align:center;">Sabhasad</div>
-      </div>
-
-      <!-- Info Side -->
-      <div class="pass-info-side">
-        <div class="pass-name" id="passName">Ramesh Patil</div>
-
-        <div class="pass-detail">
-          <div class="icon-wrap" style="background:#e6f4ea;color:var(--secondary);"><i class="fa-solid fa-user-check"></i></div>
-          <div>
-            <div style="font-weight:600;">सभासद (Sabhasad)</div>
-            <div style="font-size:12px;color:var(--text-light);">सदस्य पद / Designation</div>
-          </div>
+          <div style="font-size:10.5px;color:var(--text-light);text-align:center;">Sabhasad</div>
         </div>
 
-        <div class="pass-detail">
-          <div class="icon-wrap"><i class="fa-solid fa-location-dot"></i></div>
-          <div>
-            <div style="font-weight:600;" id="passArea">Dharavi, Mumbai</div>
-            <div style="font-size:12px;color:var(--text-light);">क्षेत्र / Ward</div>
-          </div>
-        </div>
+        <!-- Info Side -->
+        <div class="pass-info-side">
+          <div class="pass-name" id="passName">Ramesh Patil</div>
 
-        <div class="pass-detail">
-          <div class="icon-wrap"><i class="fa-solid fa-phone"></i></div>
-          <div>
-            <div style="font-weight:600;" id="passPhone">+91 9876543210</div>
-            <div style="font-size:12px;color:var(--text-light);">फोन नंबर</div>
-          </div>
-        </div>
-
-        <div class="pass-detail">
-          <div class="icon-wrap" style="background:#e6f4ea;color:var(--secondary);"><i class="fa-solid fa-calendar"></i></div>
-          <div>
-            <div style="font-weight:600;">Member Since: 14 Oct 2025</div>
-            <div style="font-size:12px;color:var(--text-light);">सभासदत्व तारीख</div>
-          </div>
-        </div>
-
-        <div class="pass-validity-box">
-          <div class="pass-validity-title">
-            <i class="fa-solid fa-shield-check" style="margin-right:4px;"></i>
-            Validity / वैधता
-          </div>
-          <div class="pass-dates">
+          <div class="pass-detail">
+            <div class="icon-wrap" style="background:#e6f4ea;color:var(--secondary);"><i class="fa-solid fa-user-check"></i></div>
             <div>
-              <div style="font-size:11px;color:#166534;font-weight:500;">From / पासून</div>
-              <div>14 Oct 2025</div>
+              <div style="font-weight:600;">सभासद (Sabhasad)</div>
+              <div style="font-size:12px;color:var(--text-light);">सदस्य पद / Designation</div>
             </div>
-            <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          </div>
+
+          <div class="pass-detail">
+            <div class="icon-wrap"><i class="fa-solid fa-location-dot"></i></div>
             <div>
-              <div style="font-size:11px;color:#166534;font-weight:500;">To / पर्यंत</div>
-              <div>13 Oct 2026</div>
+              <div style="font-weight:600;" id="passArea">Dharavi, Mumbai</div>
+              <div style="font-size:12px;color:var(--text-light);">क्षेत्र / Ward</div>
             </div>
-            <div style="margin-left:auto;">
-              <span class="badge badge-active">✓ Active / सक्रिय</span>
+          </div>
+
+          <div class="pass-detail">
+            <div class="icon-wrap"><i class="fa-solid fa-phone"></i></div>
+            <div>
+              <div style="font-weight:600;" id="passPhone">+91 9876543210</div>
+              <div style="font-size:12px;color:var(--text-light);">फोन नंबर</div>
             </div>
+          </div>
+
+          <div class="pass-detail">
+            <div class="icon-wrap" style="background:#e6f4ea;color:var(--secondary);"><i class="fa-solid fa-calendar"></i></div>
+            <div>
+              <div style="font-weight:600;">Member Since: 14 Oct 2025</div>
+              <div style="font-size:12px;color:var(--text-light);">सभासदत्व तारीख</div>
+            </div>
+          </div>
+
+          <div class="pass-validity-box">
+            <div class="pass-validity-title">
+              <i class="fa-solid fa-shield-check" style="margin-right:4px;"></i>
+              Validity / वैधता
+            </div>
+            <div class="pass-dates">
+              <div>
+                <div style="font-size:11px;color:#166534;font-weight:500;">From / पासून</div>
+                <div>14 Oct 2025</div>
+              </div>
+              <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+              <div>
+                <div style="font-size:11px;color:#166534;font-weight:500;">To / पर्यंत</div>
+                <div>13 Oct 2026</div>
+              </div>
+              <div style="margin-left:auto;">
+                <span class="badge badge-active">✓ Active / सक्रिय</span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- end pass-info-side -->
+      </div><!-- end pass-body -->
+
+      <!-- ── AD SLOT 1 (Wide Banner: below Validity card, above progress bar) ── -->
+      <div class="pass-ad-slot-1-wrapper" id="adSlot1Container" style="display:none;">
+        <div class="ad-label ad-label-slot1">
+          <span>Advertisement / जाहिरात</span>
+        </div>
+        <div class="ad-content-slot" id="adSlot1"></div>
+      </div>
+
+      <!-- FOOTER with QR -->
+      <div class="pass-footer">
+
+        <div class="pass-footer-main">
+          <div class="pass-qr-wrap">
+            <div id="qrCode"></div>
+            <div class="pass-qr-label">Scan to Verify<br>स्कॅन करा</div>
+          </div>
+
+          <div class="pass-validity-section">
+            <div class="pass-validity-header">
+              <span>Joined / सामील: Oct 2025</span>
+              <span>Expires / समाप्त: Oct 2026</span>
+            </div>
+            <div class="pass-progress-track">
+              <div class="pass-progress-fill" id="progressFill"></div>
+            </div>
+            <div class="pass-progress-labels">
+              <span><i class="fa-solid fa-circle" style="color:#4ade80;font-size:8px;"></i> 365 days remaining / दिवस बाकी</span>
+              <span>100% valid</span>
+            </div>
+            <div style="margin-top:12px;text-align:center;">
+              <div style="font-size:11px;color:rgba(255,255,255,0.6);">Annual Membership / वार्षिक सभासदत्व</div>
+              <div style="font-size:13px;color:#FFD700;font-weight:700;margin-top:2px;">
+                <i class="fa-solid fa-indian-rupee-sign" style="font-size:11px;"></i>100 / वर्ष
+              </div>
+            </div>
+          </div>
+
+          <div class="pass-scan-text">
+            <div class="scan-icon"><i class="fa-solid fa-qrcode"></i></div>
+            <div class="scan-title">Scan to Verify</div>
+            <div class="scan-mr">स्कॅन करून पडताळणी</div>
           </div>
         </div>
 
-      </div>
-    </div>
-
-    <!-- FOOTER with QR -->
-    <div class="pass-footer">
-
-      <div class="pass-qr-wrap">
-        <div id="qrCode"></div>
-        <div class="pass-qr-label">Scan to Verify<br>स्कॅन करा</div>
-      </div>
-
-      <div class="pass-validity-section">
-        <div class="pass-validity-header">
-          <span>Joined / सामील: Oct 2025</span>
-          <span>Expires / समाप्त: Oct 2026</span>
-        </div>
-        <div class="pass-progress-track">
-          <div class="pass-progress-fill" id="progressFill"></div>
-        </div>
-        <div class="pass-progress-labels">
-          <span><i class="fa-solid fa-circle" style="color:#4ade80;font-size:8px;"></i> 365 days remaining / दिवस बाकी</span>
-          <span>100% valid</span>
-        </div>
-        <div style="margin-top:12px;text-align:center;">
-          <div style="font-size:11px;color:rgba(255,255,255,0.6);">Annual Membership / वार्षिक सभासदत्व</div>
-          <div style="font-size:13px;color:#FFD700;font-weight:700;margin-top:2px;">
-            <i class="fa-solid fa-indian-rupee-sign" style="font-size:11px;"></i>100 / वर्ष
+        <!-- ── AD SLOT 3 (Wide Banner: below Annual Membership, above Issued by MTVS Admin) ── -->
+        <div class="pass-ad-slot-3-wrapper" id="adSlot3Container" style="display:none;">
+          <div class="ad-label ad-label-slot3">
+            <span>Advertisement / जाहिरात</span>
           </div>
+          <div class="ad-content-slot" id="adSlot3"></div>
         </div>
-      </div>
 
-      <div class="pass-scan-text">
-        <div class="scan-icon"><i class="fa-solid fa-qrcode"></i></div>
-        <div class="scan-title">Scan to Verify</div>
-        <div class="scan-mr">स्कॅन करून पडताळणी</div>
-        <div style="font-size:10px;color:rgba(255,255,255,0.55);margin-top:4px;">Issued by MTVS Admin<br>2025-2026</div>
-      </div>
+        <div class="pass-admin-footer-text">
+          Issued by MTVS Admin · 2025-2026
+        </div>
 
+      </div><!-- end pass-footer -->
+
+    </div><!-- end pass-card -->
+
+    <!-- ── AD SLOT 2 (Square Poster: below "Issued by MTVS Admin") ── -->
+    <div class="pass-ad-slot-2-wrapper" id="adSlot2Container" style="display:none;">
+      <div class="ad-label ad-label-slot2">
+        <span>Advertisement / जाहिरात</span>
+      </div>
+      <div class="ad-content-slot" id="adSlot2"></div>
     </div>
 
-  </div><!-- end pass-card -->
+    <!-- ── AD SLOT 4 (Square Poster: directly below slot 2, above Action Buttons) ── -->
+    <div class="pass-ad-slot-4-wrapper" id="adSlot4Container" style="display:none;">
+      <div class="ad-label ad-label-slot4">
+        <span>Advertisement / जाहिरात</span>
+      </div>
+      <div class="ad-content-slot" id="adSlot4"></div>
+    </div>
+
+  </div><!-- end pass-capture-area -->
 
   <!-- ===== ACTION BUTTONS ===== -->
   <div class="pass-actions">
     <button class="btn btn-secondary" onclick="window.print()">
       <i class="fa-solid fa-print"></i> Print / प्रिंट
     </button>
-    <button class="btn" style="background:#dc2626;color:white;" onclick="downloadPDF()">
+    <button class="btn" style="background:#dc2626;color:white;" id="btnDownloadPDF" onclick="downloadPDF()">
       <i class="fa-solid fa-file-pdf"></i> Download PDF
     </button>
-    <button class="btn btn-blue" onclick="downloadImage()">
+    <button class="btn btn-blue" id="btnDownloadImage" onclick="downloadImage()">
       <i class="fa-solid fa-image"></i> Download Image
     </button>
-    <button class="btn" style="background:#25D366;color:white;" onclick="shareWhatsApp()">
+    <button class="btn" style="background:#25D366;color:white;" id="btnShareWhatsApp" onclick="shareWhatsApp()">
       <i class="fa-brands fa-whatsapp"></i> Share / शेअर
     </button>
   </div>
@@ -573,7 +865,87 @@
 
 <!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
+// ==============================================================
+// ADVERTISEMENT CONFIGURATION
+// Easily modify or update the ads by editing this array:
+// slot: 1 -> Wide banner below Validity card, above progress bar
+// slot: 2 -> Square poster below Issued by MTVS Admin
+// slot: 3 -> Wide banner below Annual Membership ₹100, above Issued by MTVS Admin
+// slot: 4 -> Square poster directly below slot 2, above action buttons
+// src:   -> Image path in /ads folder (e.g. 'ads/ad1.jpg')
+// link:  -> Optional link URL to open in new tab (leave '' for no link)
+// ==============================================================
+const ADS = [
+  { slot: 1, src: 'ads/ad1.jpg', link: '' },
+  { slot: 2, src: 'ads/ad2.jpg', link: '' },
+  { slot: 3, src: 'ads/ad3.jpg', link: '' },
+  { slot: 4, src: 'ads/ad4.jpg', link: '' }
+];
+
+// Initialize and render advertisements
+function initAds() {
+  [1, 2, 3, 4].forEach(slotNum => {
+    const wrapper = document.getElementById(`adSlot${slotNum}Container`);
+    const content = document.getElementById(`adSlot${slotNum}`);
+    if (!wrapper || !content) return;
+
+    const adConfig = ADS.find(ad => ad.slot === slotNum);
+
+    // If no ad configured or empty src, hide completely
+    if (!adConfig || !adConfig.src || !adConfig.src.trim()) {
+      wrapper.style.display = 'none';
+      content.innerHTML = '';
+      return;
+    }
+
+    const img = document.createElement('img');
+    img.src = adConfig.src.trim();
+    img.alt = 'Advertisement / जाहिरात';
+    img.loading = 'lazy';
+    img.crossOrigin = 'anonymous'; // Ensures CORS compatibility with html2canvas/jsPDF
+    img.className = `ad-slot-${slotNum}-img`;
+
+    // Hide completely on error (no broken image icon)
+    img.onerror = () => {
+      wrapper.style.display = 'none';
+      content.innerHTML = '';
+    };
+
+    // Show container when image successfully loads
+    img.onload = () => {
+      wrapper.style.display = '';
+    };
+
+    // Check if already complete from cache
+    if (img.complete) {
+      if (img.naturalWidth === 0) {
+        wrapper.style.display = 'none';
+        content.innerHTML = '';
+      } else {
+        wrapper.style.display = '';
+      }
+    }
+
+    // Wrap in link if URL is provided
+    let toAppend = img;
+    if (adConfig.link && adConfig.link.trim()) {
+      const a = document.createElement('a');
+      a.href = adConfig.link.trim();
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.className = `ad-slot-${slotNum}-link`;
+      a.appendChild(img);
+      toAppend = a;
+    }
+
+    content.innerHTML = '';
+    content.appendChild(toAppend);
+  });
+}
+
 // Read URL query params
 const params = new URLSearchParams(window.location.search);
 const name  = params.get('name')  ? decodeURIComponent(params.get('name'))  : 'Ramesh Patil';
@@ -591,6 +963,9 @@ document.getElementById('passArea').textContent   = formattedArea;
 document.getElementById('stripArea').textContent  = formattedArea;
 document.getElementById('stripId').textContent    = id;
 
+// Render ads
+initAds();
+
 // Generate QR code
 new QRCode(document.getElementById('qrCode'), {
   text: `${id}|${name}|${formattedArea}|2026-10-13`,
@@ -606,16 +981,179 @@ setTimeout(() => {
   document.getElementById('progressFill').style.width = '5%';
 }, 600);
 
-function downloadPDF() {
-  alert('📄 PDF download feature / PDF डाउनलोड — For production, integrate with html2pdf.js or server-side PDF generation.\n\nPrint (Ctrl+P) karein aur "Save as PDF" select karein.');
+// Helper: Ensure all images in capture element are fully loaded
+async function waitForImages(element) {
+  const imgs = Array.from(element.querySelectorAll('img'));
+  await Promise.all(imgs.map(img => {
+    if (img.complete) return Promise.resolve();
+    return new Promise(resolve => {
+      img.addEventListener('load', resolve, { once: true });
+      img.addEventListener('error', resolve, { once: true });
+    });
+  }));
 }
 
-function downloadImage() {
-  alert('🖼️ Image download / प्रतिमा डाउनलोड — For production, integrate html2canvas.js to capture the pass card.\n\nSheeghra uplabdh hoga!');
+// Download Pass as PDF (Includes Member Card and all configured Advertisements)
+async function downloadPDF() {
+  const btn = document.getElementById('btnDownloadPDF');
+  const origHtml = btn ? btn.innerHTML : '';
+  if (btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating PDF...';
+
+  try {
+    const captureArea = document.getElementById('passCaptureArea');
+    if (!captureArea) throw new Error('Capture area not found');
+
+    await waitForImages(captureArea);
+
+    if (typeof html2canvas === 'undefined') {
+      window.print();
+      return;
+    }
+
+    const canvas = await html2canvas(captureArea, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: false,
+      backgroundColor: '#ffffff',
+      logging: false,
+      onclone: (clonedDoc) => {
+        const clonedArea = clonedDoc.getElementById('passCaptureArea');
+        if (clonedArea) {
+          clonedArea.style.padding = '12px';
+          clonedArea.style.background = '#ffffff';
+        }
+        const label2 = clonedDoc.querySelector('.ad-label-slot2');
+        if (label2) label2.style.color = '#64748b';
+        const label4 = clonedDoc.querySelector('.ad-label-slot4');
+        if (label4) label4.style.color = '#64748b';
+      }
+    });
+
+    if (window.jspdf && window.jspdf.jsPDF) {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      const margin = 10;
+      const maxPdfWidth = pageWidth - (margin * 2);
+      const maxPdfHeight = pageHeight - (margin * 2);
+
+      let imgWidth = maxPdfWidth;
+      let imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      if (imgHeight > maxPdfHeight) {
+        imgHeight = maxPdfHeight;
+        imgWidth = (canvas.width * imgHeight) / canvas.height;
+      }
+
+      const x = (pageWidth - imgWidth) / 2;
+      const y = margin;
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+      pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
+      pdf.save(`MTVS-Pass-${id}.pdf`);
+    } else {
+      window.print();
+    }
+  } catch (err) {
+    console.error('PDF generation error:', err);
+    alert('PDF तयार करताना त्रुटी आली. कृपया Print (Ctrl+P) मेनू मधून "Save as PDF" निवडा.');
+  } finally {
+    if (btn) btn.innerHTML = origHtml;
+  }
 }
 
-function shareWhatsApp() {
+// Download Pass as high-res Image (Includes Member Card and all configured Advertisements)
+async function downloadImage() {
+  const btn = document.getElementById('btnDownloadImage');
+  const origHtml = btn ? btn.innerHTML : '';
+  if (btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating Image...';
+
+  try {
+    const captureArea = document.getElementById('passCaptureArea');
+    if (!captureArea) throw new Error('Capture area not found');
+
+    await waitForImages(captureArea);
+
+    if (typeof html2canvas === 'undefined') {
+      alert('html2canvas लोड होऊ शकले नाही. कृपया Print पर्याय वापरा.');
+      return;
+    }
+
+    const canvas = await html2canvas(captureArea, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: false,
+      backgroundColor: '#f8fafc',
+      logging: false,
+      onclone: (clonedDoc) => {
+        const clonedArea = clonedDoc.getElementById('passCaptureArea');
+        if (clonedArea) {
+          clonedArea.style.padding = '18px';
+          clonedArea.style.borderRadius = '20px';
+          clonedArea.style.background = '#f8fafc';
+        }
+        const label2 = clonedDoc.querySelector('.ad-label-slot2');
+        if (label2) label2.style.color = '#64748b';
+        const label4 = clonedDoc.querySelector('.ad-label-slot4');
+        if (label4) label4.style.color = '#64748b';
+      }
+    });
+
+    const link = document.createElement('a');
+    link.download = `MTVS-Pass-${id}.png`;
+    link.href = canvas.toDataURL('image/png');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (err) {
+    console.error('Image download error:', err);
+    alert('प्रतिमा डाउनलोड करताना त्रुटी आली. कृपया Print (Ctrl+P) पर्याय वापरा.');
+  } finally {
+    if (btn) btn.innerHTML = origHtml;
+  }
+}
+
+// WhatsApp Share (Shares verified link and passes image on supported devices)
+async function shareWhatsApp() {
   const msg = `🏛️ *Mumbai Vidi Tambakhu Sangh*\n\n👤 *सभासद: ${name}*\n🆔 ID: ${id}\n📍 Area: ${formattedArea}\n📅 Valid Until: 13 Oct 2026\n\n✅ *सभासदत्व पडताळणी यशस्वी!*\n✅ *Sabhasad Membership Verified!*\n\n🔗 View Pass: ${window.location.href}`;
+
+  // Try Web Share API with image file if supported on device (e.g. mobile Chrome/Safari)
+  if (navigator.share && navigator.canShare && typeof html2canvas !== 'undefined') {
+    try {
+      const captureArea = document.getElementById('passCaptureArea');
+      if (captureArea) {
+        await waitForImages(captureArea);
+        const canvas = await html2canvas(captureArea, {
+          scale: 2,
+          useCORS: true,
+          allowTaint: false,
+          backgroundColor: '#ffffff'
+        });
+        const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+        if (blob) {
+          const file = new File([blob], `MTVS-Pass-${id}.png`, { type: 'image/png' });
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: `MTVS Member Pass - ${name}`,
+              text: msg
+            });
+            return;
+          }
+        }
+      }
+    } catch (e) {
+      if (e.name !== 'AbortError') {
+        console.log('Web share skipped, using direct WhatsApp link', e);
+      } else {
+        return; // User dismissed share dialog
+      }
+    }
+  }
+
+  // Fallback to wa.me link
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
 }
 </script>
