@@ -269,7 +269,7 @@
       text-align: center;
     }
 
-    /* Carousel core layout */
+    /* Carousel core layout with CSS Grid overlap */
     .ad-carousel {
       position: relative;
       width: 100%;
@@ -278,23 +278,30 @@
     }
 
     .ad-carousel-viewport {
+      display: grid;
+      grid-template-columns: 100%;
       overflow: hidden;
       width: 100%;
       position: relative;
     }
 
-    .ad-carousel-track {
-      display: flex;
+    .ad-carousel-slide {
+      grid-area: 1 / 1;
       width: 100%;
-      transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
-      will-change: transform;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(-100%);
+      pointer-events: none;
+      box-sizing: border-box;
+      will-change: transform, opacity;
     }
 
-    .ad-carousel-slide {
-      min-width: 100%;
-      width: 100%;
-      flex-shrink: 0;
-      box-sizing: border-box;
+    .ad-carousel-slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0);
+      pointer-events: auto;
+      z-index: 2;
     }
 
     .ad-carousel-slide a {
@@ -581,21 +588,22 @@
 
       /* Stack all carousel slides one below another in print */
       .ad-carousel-viewport {
+        display: flex !important;
+        flex-direction: column !important;
         overflow: visible !important;
         border: none !important;
         box-shadow: none !important;
         background: transparent !important;
-      }
-      .ad-carousel-track {
-        display: flex !important;
-        flex-direction: column !important;
-        transform: none !important;
         gap: 12px !important;
       }
       .ad-carousel-slide {
-        min-width: 100% !important;
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        position: static !important;
         width: 100% !important;
-        margin-bottom: 8px !important;
+        margin-bottom: 6px !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
       }
@@ -738,9 +746,7 @@
           <span>Advertisement / जाहिरात</span>
         </div>
         <div class="ad-carousel" id="wideCarousel">
-          <div class="ad-carousel-viewport">
-            <div class="ad-carousel-track" id="wideCarouselTrack"></div>
-          </div>
+          <div class="ad-carousel-viewport" id="wideCarouselViewport"></div>
           <div class="ad-carousel-dots" id="wideCarouselDots"></div>
         </div>
       </div>
@@ -790,9 +796,7 @@
         <span>Advertisement / जाहिरात</span>
       </div>
       <div class="ad-carousel" id="squareCarousel">
-        <div class="ad-carousel-viewport">
-          <div class="ad-carousel-track" id="squareCarouselTrack"></div>
-        </div>
+        <div class="ad-carousel-viewport" id="squareCarouselViewport"></div>
         <div class="ad-carousel-dots" id="squareCarouselDots"></div>
       </div>
     </div>
@@ -854,16 +858,17 @@ const ADS = [
   { type: 'square', src: 'ads/ad4.jpg', link: '' }
 ];
 
-// Carousel Engine (Native Vanilla JS, zero heavy libraries)
+// Carousel Engine with Continuous Left-to-Right Transitions
 class AdCarousel {
-  constructor(wrapperId, trackId, dotsId, adType) {
+  constructor(wrapperId, viewportId, dotsId, adType) {
     this.wrapper = document.getElementById(wrapperId);
-    this.track = document.getElementById(trackId);
+    this.viewport = document.getElementById(viewportId);
     this.dotsContainer = document.getElementById(dotsId);
     this.adType = adType;
     this.slides = [];
     this.currentIndex = 0;
     this.timer = null;
+    this.isTransitioning = false;
     this.startX = 0;
     this.startY = 0;
     this.isSwiping = false;
@@ -872,9 +877,9 @@ class AdCarousel {
   }
 
   init() {
-    if (!this.wrapper || !this.track) return;
+    if (!this.wrapper || !this.viewport) return;
 
-    // Filter matching ads (support both type: 'wide'/'square' and legacy slot numbers)
+    // Filter matching ads (support both type: 'wide'/'square' and slot numbers)
     const matchingAds = ADS.filter(ad => {
       const type = (ad.type || '').toLowerCase();
       if (this.adType === 'wide') {
@@ -889,12 +894,12 @@ class AdCarousel {
       return;
     }
 
-    this.track.innerHTML = '';
+    this.viewport.innerHTML = '';
     this.dotsContainer.innerHTML = '';
 
-    matchingAds.forEach(ad => {
+    matchingAds.forEach((ad, i) => {
       const slide = document.createElement('div');
-      slide.className = 'ad-carousel-slide';
+      slide.className = `ad-carousel-slide${i === 0 ? ' active' : ''}`;
 
       const img = document.createElement('img');
       img.alt = 'Advertisement / जाहिरात';
@@ -904,7 +909,7 @@ class AdCarousel {
       // If an individual image fails to load, remove its slide
       img.onerror = () => {
         slide.remove();
-        this.slides = Array.from(this.track.querySelectorAll('.ad-carousel-slide'));
+        this.slides = Array.from(this.viewport.querySelectorAll('.ad-carousel-slide'));
         if (this.slides.length === 0) {
           this.wrapper.style.display = 'none';
           this.stop();
@@ -912,8 +917,11 @@ class AdCarousel {
           if (this.currentIndex >= this.slides.length) {
             this.currentIndex = 0;
           }
+          this.slides.forEach((s, idx) => {
+            s.className = `ad-carousel-slide${idx === this.currentIndex ? ' active' : ''}`;
+            s.style.cssText = '';
+          });
           this.buildDots();
-          this.goToSlide(this.currentIndex);
         }
       };
 
@@ -930,10 +938,10 @@ class AdCarousel {
       }
 
       slide.appendChild(elementToAppend);
-      this.track.appendChild(slide);
+      this.viewport.appendChild(slide);
     });
 
-    this.slides = Array.from(this.track.querySelectorAll('.ad-carousel-slide'));
+    this.slides = Array.from(this.viewport.querySelectorAll('.ad-carousel-slide'));
     this.wrapper.style.display = '';
 
     this.buildDots();
@@ -953,8 +961,10 @@ class AdCarousel {
       const dot = document.createElement('span');
       dot.className = `ad-carousel-dot${i === this.currentIndex ? ' active' : ''}`;
       dot.addEventListener('click', () => {
-        this.goToSlide(i);
-        this.resetTimer();
+        if (i !== this.currentIndex) {
+          this.slide('ltr', i);
+          this.resetTimer();
+        }
       });
       this.dotsContainer.appendChild(dot);
     });
@@ -967,27 +977,67 @@ class AdCarousel {
     });
   }
 
-  goToSlide(index) {
-    if (this.slides.length === 0) return;
-    this.currentIndex = (index + this.slides.length) % this.slides.length;
-    this.track.style.transform = `translateX(-${this.currentIndex * 100}%)`;
-    this.updateDots();
-  }
+  // Consistent Left-to-Right slide transition:
+  // Incoming slide enters from left (-100% -> 0%)
+  // Current slide exits to right (0% -> 100%)
+  slide(direction = 'ltr', targetIndex = null) {
+    if (this.slides.length <= 1 || this.isTransitioning) return;
 
-  nextSlide() {
-    if (this.slides.length <= 1) return;
-    this.goToSlide(this.currentIndex + 1);
-  }
+    this.isTransitioning = true;
+    const currentSlide = this.slides[this.currentIndex];
 
-  prevSlide() {
-    if (this.slides.length <= 1) return;
-    this.goToSlide(this.currentIndex - 1);
+    let nextIndex;
+    if (targetIndex !== null) {
+      nextIndex = targetIndex;
+    } else {
+      nextIndex = direction === 'ltr' 
+        ? (this.currentIndex + 1) % this.slides.length 
+        : (this.currentIndex - 1 + this.slides.length) % this.slides.length;
+    }
+
+    const nextSlide = this.slides[nextIndex];
+
+    const incomingStartX = direction === 'ltr' ? '-100%' : '100%';
+    const currentEndX   = direction === 'ltr' ? '100%' : '-100%';
+
+    // Step 1: Place incoming slide offscreen without transition
+    nextSlide.style.transition = 'none';
+    nextSlide.style.transform = `translateX(${incomingStartX})`;
+    nextSlide.style.opacity = '1';
+    nextSlide.style.visibility = 'visible';
+    nextSlide.style.zIndex = '3';
+    currentSlide.style.zIndex = '2';
+
+    // Force browser reflow to commit initial transform
+    void nextSlide.offsetWidth;
+
+    // Step 2: Animate both slides simultaneously in Left-to-Right direction
+    const transitionCurve = 'transform 0.55s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.55s ease';
+    nextSlide.style.transition = transitionCurve;
+    currentSlide.style.transition = transitionCurve;
+
+    nextSlide.style.transform = 'translateX(0%)';
+    currentSlide.style.transform = `translateX(${currentEndX})`;
+
+    // Step 3: Clean up and activate incoming slide after animation
+    setTimeout(() => {
+      currentSlide.classList.remove('active');
+      currentSlide.style.cssText = '';
+
+      nextSlide.classList.add('active');
+      nextSlide.style.cssText = '';
+
+      this.currentIndex = nextIndex;
+      this.updateDots();
+      this.isTransitioning = false;
+    }, 560);
   }
 
   start() {
     if (this.slides.length <= 1) return;
     this.stop();
-    this.timer = setInterval(() => this.nextSlide(), 3000);
+    // Auto-slides continuously in Left-to-Right direction ('ltr') every 3 seconds
+    this.timer = setInterval(() => this.slide('ltr'), 3000);
   }
 
   stop() {
@@ -1007,15 +1057,15 @@ class AdCarousel {
     this.wrapper.addEventListener('mouseenter', () => this.stop());
     this.wrapper.addEventListener('mouseleave', () => this.start());
 
-    // Touch swipe support & pause on touch
-    this.track.addEventListener('touchstart', (e) => {
+    // Swipe support on mobile with pause
+    this.viewport.addEventListener('touchstart', (e) => {
       this.stop();
       this.startX = e.touches[0].clientX;
       this.startY = e.touches[0].clientY;
       this.isSwiping = true;
     }, { passive: true });
 
-    this.track.addEventListener('touchend', (e) => {
+    this.viewport.addEventListener('touchend', (e) => {
       if (!this.isSwiping) return;
       this.isSwiping = false;
       const endX = e.changedTouches[0].clientX;
@@ -1023,12 +1073,12 @@ class AdCarousel {
       const diffX = endX - this.startX;
       const diffY = endY - this.startY;
 
-      // Detect horizontal swipe
+      // Detect swipe: swipe right (diffX > 35) or swipe left (diffX < -35)
       if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
-        if (diffX < 0) {
-          this.nextSlide();
+        if (diffX > 0) {
+          this.slide('ltr');
         } else {
-          this.prevSlide();
+          this.slide('rtl');
         }
       }
       this.resetTimer();
@@ -1053,9 +1103,9 @@ document.getElementById('passArea').textContent   = formattedArea;
 document.getElementById('stripArea').textContent  = formattedArea;
 document.getElementById('stripId').textContent    = id;
 
-// Initialize both auto-sliding carousels
-const wideCarousel = new AdCarousel('wideCarouselWrapper', 'wideCarouselTrack', 'wideCarouselDots', 'wide');
-const squareCarousel = new AdCarousel('squareCarouselWrapper', 'squareCarouselTrack', 'squareCarouselDots', 'square');
+// Initialize both auto-sliding carousels (Left-to-Right direction)
+const wideCarousel = new AdCarousel('wideCarouselWrapper', 'wideCarouselViewport', 'wideCarouselDots', 'wide');
+const squareCarousel = new AdCarousel('squareCarouselWrapper', 'squareCarouselViewport', 'squareCarouselDots', 'square');
 
 // Generate QR code
 new QRCode(document.getElementById('qrCode'), {
@@ -1103,21 +1153,21 @@ function prepareClonedForCapture(clonedDoc) {
 
   // Stack all carousel slides vertically
   clonedDoc.querySelectorAll('.ad-carousel-viewport').forEach(vp => {
+    vp.style.display = 'flex';
+    vp.style.flexDirection = 'column';
     vp.style.overflow = 'visible';
     vp.style.border = 'none';
     vp.style.boxShadow = 'none';
     vp.style.background = 'transparent';
-  });
-
-  clonedDoc.querySelectorAll('.ad-carousel-track').forEach(track => {
-    track.style.display = 'flex';
-    track.style.flexDirection = 'column';
-    track.style.transform = 'none';
-    track.style.gap = '12px';
+    vp.style.gap = '12px';
   });
 
   clonedDoc.querySelectorAll('.ad-carousel-slide').forEach(slide => {
-    slide.style.minWidth = '100%';
+    slide.style.display = 'block';
+    slide.style.opacity = '1';
+    slide.style.visibility = 'visible';
+    slide.style.transform = 'none';
+    slide.style.position = 'static';
     slide.style.width = '100%';
     slide.style.marginBottom = '6px';
   });
