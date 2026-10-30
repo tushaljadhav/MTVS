@@ -754,7 +754,7 @@
       </div><!-- end pass-body -->
 
       <!-- ── AD SLOT 1 (Wide Banner: below Validity card, above progress bar) ── -->
-      <div class="pass-ad-slot-1-wrapper" id="adSlot1Container" style="display:none;">
+      <div class="pass-ad-slot-1-wrapper" id="adSlot1Container">
         <div class="ad-label ad-label-slot1">
           <span>Advertisement / जाहिरात</span>
         </div>
@@ -798,7 +798,7 @@
         </div>
 
         <!-- ── AD SLOT 3 (Wide Banner: below Annual Membership, above Issued by MTVS Admin) ── -->
-        <div class="pass-ad-slot-3-wrapper" id="adSlot3Container" style="display:none;">
+        <div class="pass-ad-slot-3-wrapper" id="adSlot3Container">
           <div class="ad-label ad-label-slot3">
             <span>Advertisement / जाहिरात</span>
           </div>
@@ -814,7 +814,7 @@
     </div><!-- end pass-card -->
 
     <!-- ── AD SLOT 2 (Square Poster: below "Issued by MTVS Admin") ── -->
-    <div class="pass-ad-slot-2-wrapper" id="adSlot2Container" style="display:none;">
+    <div class="pass-ad-slot-2-wrapper" id="adSlot2Container">
       <div class="ad-label ad-label-slot2">
         <span>Advertisement / जाहिरात</span>
       </div>
@@ -822,7 +822,7 @@
     </div>
 
     <!-- ── AD SLOT 4 (Square Poster: directly below slot 2, above Action Buttons) ── -->
-    <div class="pass-ad-slot-4-wrapper" id="adSlot4Container" style="display:none;">
+    <div class="pass-ad-slot-4-wrapper" id="adSlot4Container">
       <div class="ad-label ad-label-slot4">
         <span>Advertisement / जाहिरात</span>
       </div>
@@ -901,11 +901,10 @@ function initAds() {
       return;
     }
 
+    wrapper.style.display = '';
+
     const img = document.createElement('img');
-    img.src = adConfig.src.trim();
     img.alt = 'Advertisement / जाहिरात';
-    img.loading = 'lazy';
-    img.crossOrigin = 'anonymous'; // Ensures CORS compatibility with html2canvas/jsPDF
     img.className = `ad-slot-${slotNum}-img`;
 
     // Hide completely on error (no broken image icon)
@@ -914,20 +913,7 @@ function initAds() {
       content.innerHTML = '';
     };
 
-    // Show container when image successfully loads
-    img.onload = () => {
-      wrapper.style.display = '';
-    };
-
-    // Check if already complete from cache
-    if (img.complete) {
-      if (img.naturalWidth === 0) {
-        wrapper.style.display = 'none';
-        content.innerHTML = '';
-      } else {
-        wrapper.style.display = '';
-      }
-    }
+    img.src = adConfig.src.trim();
 
     // Wrap in link if URL is provided
     let toAppend = img;

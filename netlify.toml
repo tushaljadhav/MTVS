@@ -1,6 +1,11 @@
 [build]
   publish = "."
 
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+
 [[redirects]]
   from = "/dashboard"
   to = "/index.html"
